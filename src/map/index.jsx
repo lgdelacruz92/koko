@@ -5,6 +5,21 @@ import './map.css';
 function Map() {
     const mapViewBox = useRef(null);
     const mapBoxContainer = useRef(null);
+    const minZoom = 1000;
+    const maxZoom = 300;
+
+    const onScrollUpdate = (val) => {
+        const viewBoxAttr = mapViewBox.current.getAttribute('viewBox');
+        const viewBoxDim = viewBoxAttr.split(' ');
+
+        // map val to min max zooms
+        const range = minZoom - maxZoom; // backward but min is bigger
+        const rangeVal = range * (val / 100); // 100 is scroll indicator max
+        const zoomVal = rangeVal + maxZoom; // offset it based on min
+        console.log(zoomVal);
+        const newViewBoxDim = [viewBoxDim[0], viewBoxDim[1], zoomVal, zoomVal];
+        mapViewBox.current.setAttribute('viewBox', newViewBoxDim.join(' '));
+    }
 
     useEffect(() => {
         let mouseDown = false;
@@ -44,7 +59,7 @@ function Map() {
 
     return (
         <div className="map-container" ref={mapBoxContainer}>
-            <ScrollIndicator></ScrollIndicator>
+            <ScrollIndicator mapBoxContainerRef={mapBoxContainer} valueUpdate={onScrollUpdate}></ScrollIndicator>
             <svg className="map-view-box" ref={mapViewBox} viewBox="0 0 1000 1000" fill="none">
                 <path
                     id="095"
