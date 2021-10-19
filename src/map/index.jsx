@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import ScrollIndicator from './scroll-indicator';
 import './map.css';
 
 function Map() {
@@ -30,12 +31,18 @@ function Map() {
         mapViewBox.addEventListener('mouseup', e => {
             mouseDown = false;
         });
+
+        // in case mapViewBox failed to put mouse up
+        const body = document.querySelector('body');
+        body.addEventListener('mouseup', e => {
+            mouseDown = false;
+        });
     },[]);
 
     return (
         <div className="map-container">
-            <div className="map-controls bg-gray-50"></div>
-            <svg id="map-view-box" width="960" height="960" viewBox="0 0 1000 1000" fill="none">
+            <ScrollIndicator></ScrollIndicator>
+            <svg id="map-view-box" viewBox="0 0 1000 1000" fill="none">
                 <path
                     id="095"
                     fill="hsl(29,90%,61%)"

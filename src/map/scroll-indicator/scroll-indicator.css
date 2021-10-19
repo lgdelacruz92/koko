@@ -1,0 +1,34 @@
+
+.scroll-indicator {
+    --scroll-width: 12.5rem;
+    background: var(--test-var);
+    width: var(--scroll-width);
+    height: var(--scroll-indicator-height);
+    position: absolute;
+    bottom: 1rem;
+    left: calc(50% - calc(var(--scroll-width) / 2));
+}
+
+.scroll-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.scroll-container .line {
+    --line-height: .3rem;
+    background: blue;
+    height: var(--line-height);
+    position: absolute;
+    top: calc(50% - calc(var(--line-height) / 2));
+    width: 100%;
+}
+
+.scroll-container .ball {
+    --height: 20px;
+    width: var(--scroll-indicator-height);
+    height: var(--scroll-indicator-height);
+    background: green;
+    position: absolute;
+    border-radius: 50%;
+}
