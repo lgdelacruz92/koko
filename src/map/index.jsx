@@ -16,7 +16,6 @@ function Map() {
         const range = minZoom - maxZoom; // backward but min is bigger
         const rangeVal = range * (val / 100); // 100 is scroll indicator max
         const zoomVal = rangeVal + maxZoom; // offset it based on min
-        console.log(zoomVal);
         const newViewBoxDim = [viewBoxDim[0], viewBoxDim[1], zoomVal, zoomVal];
         mapViewBox.current.setAttribute('viewBox', newViewBoxDim.join(' '));
     }
