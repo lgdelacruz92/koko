@@ -1,7 +1,5 @@
 import './scroll-indicator.css';
 import { useEffect, useRef } from 'react';
-import PlusSign from './plus-sign';
-import MinusSign from './minus-sign';
 
 function ScrollIndicator({ mapBoxContainerRef, valueUpdate }) {
     const ballRef = useRef(null);
