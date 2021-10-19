@@ -1,7 +1,6 @@
 
 .scroll-indicator {
     --scroll-width: 12.5rem;
-    background: var(--test-var);
     width: var(--scroll-width);
     height: var(--scroll-indicator-height);
     position: absolute;
@@ -17,18 +16,20 @@
 
 .scroll-container .line {
     --line-height: .3rem;
-    background: blue;
+    background: grey;
     height: var(--line-height);
     position: absolute;
     top: calc(50% - calc(var(--line-height) / 2));
     width: 100%;
+    border-radius: .1rem;
 }
 
 .scroll-container .ball {
     --height: 20px;
     width: var(--scroll-indicator-height);
     height: var(--scroll-indicator-height);
-    background: green;
+    background: lightgray;
+    box-shadow: 1px 1px 2px grey;
     position: absolute;
     border-radius: 50%;
 }

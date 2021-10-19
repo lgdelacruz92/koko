@@ -1,34 +1,37 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import ScrollIndicator from './scroll-indicator';
 import './map.css';
 
 function Map() {
+    const mapViewBox = useRef(null);
+    const mapBoxContainer = useRef(null);
+
     useEffect(() => {
-        const mapViewBox = document.querySelector('#map-view-box');
         let mouseDown = false;
         let startX = 0;
         let startY = 0;
         let startViewBoxX = 0;
         let startViewBoxY = 0;
-        mapViewBox.addEventListener('mousedown', e => {
+
+        mapViewBox.current.addEventListener('mousedown', e => {
             mouseDown = true;
             startX = e.clientX;
             startY = e.clientY;
-            const attr = mapViewBox.getAttribute('viewBox');
+            const attr = mapViewBox.current.getAttribute('viewBox');
             const attrArray = attr.split(' ');
             startViewBoxX = parseInt(attrArray[0]);
             startViewBoxY = parseInt(attrArray[1]);
         });
-        mapViewBox.addEventListener('mousemove', e => {
+        mapViewBox.current.addEventListener('mousemove', e => {
             if (mouseDown) {
-                const attr = mapViewBox.getAttribute('viewBox');
+                const attr = mapViewBox.current.getAttribute('viewBox');
                 const attrArray = attr.split(' ');
                 const changeX = parseInt(e.clientX - startX);
                 const changeY = parseInt(e.clientY - startY);
-                mapViewBox.setAttribute('viewBox', `${-changeX + startViewBoxX} ${-changeY + startViewBoxY} ${attrArray[2]} ${attrArray[3]}`);
+                mapViewBox.current.setAttribute('viewBox', `${-changeX + startViewBoxX} ${-changeY + startViewBoxY} ${attrArray[2]} ${attrArray[3]}`);
             }
         });
-        mapViewBox.addEventListener('mouseup', e => {
+        mapViewBox.current.addEventListener('mouseup', e => {
             mouseDown = false;
         });
 
@@ -40,9 +43,9 @@ function Map() {
     },[]);
 
     return (
-        <div className="map-container">
+        <div className="map-container" ref={mapBoxContainer}>
             <ScrollIndicator></ScrollIndicator>
-            <svg id="map-view-box" viewBox="0 0 1000 1000" fill="none">
+            <svg className="map-view-box" ref={mapViewBox} viewBox="0 0 1000 1000" fill="none">
                 <path
                     id="095"
                     fill="hsl(29,90%,61%)"
