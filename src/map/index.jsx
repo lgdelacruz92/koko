@@ -55,8 +55,8 @@ function Map() {
             mouseDown = false;
         });
 
-        
-        fetch(process.env.REACT_APP_SERVER)
+        let route = window.location.href.includes('florida') ? 'florida' : '';
+        fetch(process.env.REACT_APP_SERVER + route)
             .then(res => {
                 return res.text();
             })
@@ -82,7 +82,7 @@ function Map() {
         <div className="map-container" ref={mapBoxContainer}>
             <ScrollIndicator mapBoxContainerRef={mapBoxContainer} valueUpdate={onScrollUpdate}></ScrollIndicator>
             <svg className="map-view-box" ref={mapViewBox} viewBox="0 0 1000 1000" fill="#000">
-                <text className="please-wait-message" text-anchor="middle" x="50%" y="50%">Please wait...</text>
+                <text className="please-wait-message" textAnchor="middle" x="50%" y="50%">Please wait...</text>
             </svg>
         </div> 
     )
