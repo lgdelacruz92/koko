@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import ScrollIndicator from './scroll-indicator';
+import Legend from './legend';
 import './map.css';
 
 function Map() {
@@ -81,6 +82,7 @@ function Map() {
     return (
         <div className="map-container" ref={mapBoxContainer}>
             <ScrollIndicator mapBoxContainerRef={mapBoxContainer} valueUpdate={onScrollUpdate}></ScrollIndicator>
+            <Legend />
             <svg className="map-view-box" ref={mapViewBox} viewBox="0 0 1000 1000" fill="#000">
                 {/* <text className="please-wait-message" textAnchor="middle" x="50%" y="50%">Please wait...</text> */}
                 <path id="12095" fill="hsl(29,90%,61%)" d="M744.7,366.5L744.7,365.5L744.7,364.1L745.7,361L744.6,359.9L744.2,350.4L744.1,347.8L743.7,334.9L744.9,334.8L745.2,332.1L748,332L756.1,331.8L759.5,331.7L774.4,331.5L774.3,335.7L773.5,338.3L771.2,341.6L769,342.5L769.1,346.7L769.1,347.6L769.2,351.8L769.5,352.4L769.6,352.4L771.3,352.3L773.3,352.3L774.9,352.3L778.3,352.2L779.6,352.1L781.2,352L782.2,352.2L783.7,352.1L785.5,352.1L785.8,353.1L785.9,353.3L786,355.2L786,356.1L788.4,356.1L789.6,356.1L791.7,355.9L791.7,356L792.2,355.9L792.3,355.9L796.5,355.8L801.1,355.6L803.1,355.5L807.4,355.3L811,355.2L828.9,354.6L832.3,355.6L834.4,357.1L834.1,358.5L836.3,361.5L835.7,365.3L839.4,367.7L839.6,368.9L841.6,368.7L842.8,369.9L842.6,371.6L844.2,374.5L841.2,375.2L841,377.2L841.9,378.2L840.8,380L841.3,381.8L843,383.6L842.4,386.9L844.1,388.6L845.8,392.2L828.5,392.6L825.5,392.8L806.4,393.3L799.1,393.5L789.3,393.8L788.1,393.8L782.6,394L780.1,394.1L777.4,394.2L775.4,394.2L771.9,394.3L766.8,394.6L764,394.6L761.3,394.7L745.4,395.1L745.1,382.6L745,380.3L744.8,371.1Z"></path>
