@@ -1,0 +1,9 @@
+.navbar {
+    background: #eee;
+    box-shadow: 1px 0px 3px grey;
+    text-align: left;
+}
+
+.navbar > button {
+    margin: .5rem;
+}
