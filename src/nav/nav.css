@@ -2,6 +2,7 @@
     background: #eee;
     box-shadow: 1px 0px 3px grey;
     text-align: left;
+    height: var(--navbar-height);
 }
 
 .navbar > button {
