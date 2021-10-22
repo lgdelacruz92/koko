@@ -57,7 +57,7 @@ function Map() {
         });
 
         let route = window.location.href.includes('florida') ? 'florida' : '';
-        fetch(process.env.REACT_APP_SERVER + route)
+        fetch(process.env.REACT_APP_SERVER + '/state/' + route)
             .then(res => {
                 return res.json();
             })
