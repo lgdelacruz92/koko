@@ -6,7 +6,7 @@ export default function Legend() {
     const minLabelRef = useRef(null);
 
     useEffect(() => {
-        fetch(process.env.REACT_APP_SERVER + 'legend')
+        fetch(process.env.REACT_APP_SERVER + '/legend')
             .then(resp => {
                 return resp.json();
             })
