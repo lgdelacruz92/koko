@@ -1,9 +1,19 @@
+
+:root{
+    --scroll-indicator-height: 1.25rem;
+    --navbar-height: 40px;
+    --navbar-color: #eee;
+}
+
 .App {
   text-align: center;
   width: 100vw;
   height: 100vh;
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .main-panel {
@@ -11,10 +21,7 @@
     width: 100%;
 }
 
-:root{
-    --scroll-indicator-height: 1.25rem;
-    --navbar-height: 40px;
-}
+
 
 .state-info-popup {
     position: absolute;

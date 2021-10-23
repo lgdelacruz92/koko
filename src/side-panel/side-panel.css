@@ -1,0 +1,11 @@
+.side-panel {
+    height: 100%;
+    background: var(--navbar-color);
+    width: 0;
+    transition: width .1s ease-in;
+    box-shadow: 1px 0px 2px grey;
+}
+
+.show-side-panel {
+    width: 20rem;
+}
