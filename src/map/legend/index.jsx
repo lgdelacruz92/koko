@@ -6,13 +6,14 @@ export default function Legend() {
     const minLabelRef = useRef(null);
 
     useEffect(() => {
-        fetch(process.env.REACT_APP_SERVER + '/legend')
+        let route = window.location.href.includes('florida') ? 'florida' : '';
+        fetch(process.env.REACT_APP_SERVER + '/legend/percent/' + route)
             .then(resp => {
                 return resp.json();
             })
             .then(json => {
                 maxLabelRef.current.innerHTML = `<span>Max ~${json.max}%</span>`;
-                minLabelRef.current.innerHTML = `<span>Max ~${json.min}%</span>`;
+                minLabelRef.current.innerHTML = `<span>Min ~${json.min}%</span>`;
             })
             .catch(err => {
                 console.log(err);

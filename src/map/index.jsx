@@ -3,6 +3,10 @@ import ScrollIndicator from './scroll-indicator';
 import Legend from './legend';
 import './map.css';
 
+function popUp(e, json) {
+    console.log('show pop up at', e.clientX, e.clientY);
+}
+
 function Map() {
     const mapViewBox = useRef(null);
     const mapBoxContainer = useRef(null);
@@ -28,33 +32,58 @@ function Map() {
         let startViewBoxX = 0;
         let startViewBoxY = 0;
 
-        mapViewBox.current.addEventListener('mousedown', e => {
+        const mapViewBoxEl = mapViewBox.current;
+
+        // Actions for cleanup
+        const mouseDownAction =  e => {
             mouseDown = true;
             startX = e.clientX;
             startY = e.clientY;
-            const attr = mapViewBox.current.getAttribute('viewBox');
+            const attr = mapViewBoxEl.getAttribute('viewBox');
             const attrArray = attr.split(' ');
             startViewBoxX = parseInt(attrArray[0]);
             startViewBoxY = parseInt(attrArray[1]);
-        });
-        mapViewBox.current.addEventListener('mousemove', e => {
+        }
+
+        const mouseMoveAction = e => {
             if (mouseDown) {
-                const attr = mapViewBox.current.getAttribute('viewBox');
+                const attr = mapViewBoxEl.getAttribute('viewBox');
                 const attrArray = attr.split(' ');
                 const changeX = parseInt(e.clientX - startX);
                 const changeY = parseInt(e.clientY - startY);
-                mapViewBox.current.setAttribute('viewBox', `${-changeX + startViewBoxX} ${-changeY + startViewBoxY} ${attrArray[2]} ${attrArray[3]}`);
+                mapViewBoxEl.setAttribute('viewBox', `${-changeX + startViewBoxX} ${-changeY + startViewBoxY} ${attrArray[2]} ${attrArray[3]}`);
             }
-        });
-        mapViewBox.current.addEventListener('mouseup', e => {
+        }
+
+        const mouseUpAction = e => {
             mouseDown = false;
-        });
+        }
+
+        // Attach event listeners
+        mapViewBoxEl.addEventListener('mousedown', mouseDownAction);
+        mapViewBoxEl.addEventListener('mousemove', mouseMoveAction);
+        mapViewBoxEl.addEventListener('mouseup', mouseUpAction);
 
         // in case mapViewBox failed to put mouse up
         const body = document.querySelector('body');
-        body.addEventListener('mouseup', e => {
-            mouseDown = false;
-        });
+        body.addEventListener('mouseup', mouseUpAction);
+
+        // event callback for paths
+        const pathEventCallback = e => {
+            const fips = e.target.getAttribute('id');
+            const state_fips = fips.substring(0, 2);
+            const county_fips = fips.substring(2);
+            fetch(process.env.REACT_APP_SERVER + `/state/${state_fips}/county/${county_fips}`)
+                .then(resp => {
+                    return resp.json();
+                })
+                .then(json => {
+                    popUp(e, json);
+                })
+                .catch(e => {
+                    console.log(e);
+                })
+        }
 
         let route = window.location.href.includes('florida') ? 'florida' : '';
         fetch(process.env.REACT_APP_SERVER + '/state/' + route)
@@ -62,17 +91,38 @@ function Map() {
                 return res.json();
             })
             .then(json => {
-                mapViewBox.current.innerHTML = json.row[0].svg;
-                mapViewBox.current.setAttribute('fill', 'none');
+                mapViewBoxEl.innerHTML = json.row[0].svg;
+                mapViewBoxEl.setAttribute('fill', 'none');
+
+                const pathEls = mapViewBoxEl.querySelectorAll('path');
+                pathEls.forEach(pathEl => {
+                    pathEl.addEventListener('mouseover', pathEventCallback);
+                });
             })
             .catch(err => {
                 console.log(err);
             })
             .finally(() => {
-                if (mapViewBox.current.innerHTML === '') {
+                if (mapViewBoxEl.innerHTML === '') {
                     console.log('error')
                 }
             })
+
+        return () => {
+            // clean event listeners
+            const pathEls = mapViewBoxEl.querySelectorAll('path');
+            pathEls.forEach(pathEl => {
+                pathEl.removeEventListener('mouseover', pathEventCallback);
+            });
+
+            // clean mapViewBoxEl listeners
+            mapViewBoxEl.removeEventListener('mousedown', mouseDownAction);
+            mapViewBoxEl.removeEventListener('mousemove', mouseMoveAction);
+            mapViewBoxEl.removeEventListener('mouseup', mouseUpAction);
+
+            // clean event listener on body
+            body.removeEventListener('mouseup', mouseUpAction);
+        }
     },[]);
 
     return (

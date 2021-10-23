@@ -7,6 +7,11 @@ function App() {
     <div className="App">
         <Nav />
         <Map />
+        <div className="state-info-popup">
+            <div id="state">CA</div>
+            <div id="county">Santa Barbara</div>
+            <div id="county">Value</div>
+        </div>
     </div>
   );
 }

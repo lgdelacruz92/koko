@@ -10,3 +10,14 @@
     --scroll-indicator-height: 1.25rem;
     --navbar-height: 40px;
 }
+
+.state-info-popup {
+    position: absolute;
+    top: 0;
+    left: 0;
+    /* display: none; */
+    border: 1px solid grey;
+    box-shadow: 1px 1px 3px grey;
+    background: white;
+    padding: 1rem;
+}
