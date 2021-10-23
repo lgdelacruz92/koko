@@ -4,7 +4,25 @@ import Legend from './legend';
 import './map.css';
 
 function popUp(e, json) {
-    console.log('show pop up at', e.clientX, e.clientY);
+    if (window.popupTimeout) {
+        clearTimeout(window.popupTimeout);
+    }
+    const popup = document.querySelector('.state-info-popup');
+    popup.setAttribute('style', [
+        'display: inline-block',
+        `top: ${e.clientY}px`,
+        `left: ${e.clientX}px`,
+        'transform: translate(0%, -150%)'
+    ].join(';'));
+
+    // Update the values
+    popup.querySelector('#state').innerText = json.state_name;
+    popup.querySelector('#county').innerText = json.county_name;
+    popup.querySelector('#value').innerText = json.value;
+
+    window.popupTimeout = setTimeout(() => {
+        popup.setAttribute('style', 'display: none');
+    }, 2000);
 }
 
 function Map() {

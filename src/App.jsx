@@ -10,7 +10,7 @@ function App() {
         <div className="state-info-popup">
             <div id="state">CA</div>
             <div id="county">Santa Barbara</div>
-            <div id="county">Value</div>
+            <div id="value">Value</div>
         </div>
     </div>
   );
