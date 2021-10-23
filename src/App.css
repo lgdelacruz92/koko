@@ -6,6 +6,11 @@
   overflow: hidden;
 }
 
+.main-panel {
+    height: 100%;
+    width: 100%;
+}
+
 :root{
     --scroll-indicator-height: 1.25rem;
     --navbar-height: 40px;

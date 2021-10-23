@@ -18,7 +18,7 @@ function popUp(e, json) {
     // Update the values
     popup.querySelector('#state').innerText = json.state_name;
     popup.querySelector('#county').innerText = json.county_name;
-    popup.querySelector('#value').innerText = json.value;
+    popup.querySelector('#value').innerText = `${json.value}%`;
 
     window.popupTimeout = setTimeout(() => {
         popup.setAttribute('style', 'display: none');
