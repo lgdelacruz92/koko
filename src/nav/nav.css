@@ -3,8 +3,31 @@
     box-shadow: 1px 0px 3px grey;
     text-align: left;
     height: var(--navbar-height);
+    display: flex;
+    justify-content: space-between;
 }
 
 .navbar > button {
     margin: .5rem;
+}
+
+.search-input {
+    display: flex;
+    border: 1px solid lightgrey;
+    padding-top: .25rem;
+    padding-bottom: .25rem;
+    align-items: center;
+}
+
+.search-input > .icon {
+    padding-left: .3rem;
+    padding-right: .3rem;
+}
+
+.search-input > input {
+    background: none;
+    -webkit-appearance: none;
+    outline: none;
+    border: none;
+    font-size: 1.2rem;
 }
