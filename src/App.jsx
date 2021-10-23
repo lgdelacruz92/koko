@@ -11,11 +11,15 @@ function App() {
         setShowSidePanel(!showSidePanel);
     }
 
+    const searchAction = (searchQuery) => {
+        console.log(searchQuery);
+    }
+
     return (
         <div className="App">
-            <SidePanel show={showSidePanel} />
+            <SidePanel show={showSidePanel} data={{ features: [] }}/>
             <div className="main-panel">
-                <Nav hamburgerClick={hamburgerClick}/>
+                <Nav hamburgerClick={hamburgerClick} searchAction={searchAction}/>
                 <Map />
                 <div className="state-info-popup">
                     <div id="state">CA</div>

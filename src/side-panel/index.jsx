@@ -2,7 +2,7 @@ import './side-panel.css';
 import Feature from './feature';
 import { useRef, useEffect } from 'react';
 
-export default function SidePanel({ show }) {
+export default function SidePanel({ show, data }) {
     const sidePanelRef = useRef(null);
     const sidePanelContainerRef = useRef(null);
 
@@ -22,10 +22,12 @@ export default function SidePanel({ show }) {
 
     return <div className={"side-panel" + (show ? ' show-side-panel' : '')} ref={sidePanelRef}>
         <div ref={sidePanelContainerRef}>
-            <Feature 
-                title="20 to 24 Year Olds in Florida Per County"
-                description="The number of people between the age of 20 to 24 in Florida."
-            />
+            { data.features.map(feature => {
+                return <Feature 
+                    title={feature.title}
+                    description={feature.description}
+                />
+            })}
         </div>
     </div>
 }

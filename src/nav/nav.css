@@ -22,6 +22,7 @@
 .search-input > .icon {
     padding-left: .3rem;
     padding-right: .3rem;
+    cursor: pointer;
 }
 
 .search-input > input {
