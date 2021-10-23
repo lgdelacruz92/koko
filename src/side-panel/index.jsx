@@ -23,7 +23,8 @@ export default function SidePanel({ show, data }) {
     return <div className={"side-panel" + (show ? ' show-side-panel' : '')} ref={sidePanelRef}>
         <div ref={sidePanelContainerRef}>
             { data.features.map(feature => {
-                return <Feature 
+                return <Feature
+                    key={feature.id}
                     title={feature.title}
                     description={feature.description}
                 />

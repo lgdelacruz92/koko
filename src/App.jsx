@@ -6,18 +6,25 @@ import { useState } from 'react';
 
 function App() {
     const [showSidePanel, setShowSidePanel] = useState(false);
+    const [features, setFeatures] = useState([]);
 
     const hamburgerClick = () => {
         setShowSidePanel(!showSidePanel);
     }
 
     const searchAction = (searchQuery) => {
-        console.log(searchQuery);
+        // console.log(searchQuery);
+        fetch(process.env.REACT_APP_SERVER + '/search?query=' + searchQuery)
+            .then(res => res.json())
+            .then(json => {
+                setFeatures(json.response);
+            })
+            .catch(err => console.log(err));
     }
 
     return (
         <div className="App">
-            <SidePanel show={showSidePanel} data={{ features: [] }}/>
+            <SidePanel show={showSidePanel} data={{ features }}/>
             <div className="main-panel">
                 <Nav hamburgerClick={hamburgerClick} searchAction={searchAction}/>
                 <Map />
