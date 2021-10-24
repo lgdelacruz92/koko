@@ -5,9 +5,19 @@ import { useState } from 'react';
 
 export default function UploadFile() {
     const [workflowIndex, setWorkflowIndex] = useState(0);
+    const [fileUploaded, setFileUploaded] = useState('');
+
     const workflowPicker = index => {
         if (index === 0) {
-            return <div>work-flow 1</div>;
+            return <div className="upload-file-workflow">
+                <label className="csv-upload">
+                    Upload CSV
+                    <input type="file" accept="text/csv" onChange={e => {
+                        setFileUploaded(e.target.files[0].name);
+                    }}></input>
+                </label>
+                <div className="file-uploaded">{fileUploaded}</div>
+            </div>;
         } else if (index === 1) {
             return <div>work-flow 2</div>;
         } else if (index === 2) {

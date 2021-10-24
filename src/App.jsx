@@ -9,6 +9,7 @@ function App() {
     const [showSidePanel, setShowSidePanel] = useState(false);
     const [features, setFeatures] = useState([]);
     const [mapId, setMapId] = useState('');
+    const [showUploadFile, setShowUploadFile] = useState(false);
 
     const hamburgerClick = () => {
         setShowSidePanel(!showSidePanel);
@@ -28,11 +29,18 @@ function App() {
         setMapId(`${id}`);
     }
 
+    const handleUploadClick = () => {
+        setShowUploadFile(!showUploadFile);
+    }
+
     return (
         <div className="App">
             <SidePanel show={showSidePanel} data={{ features }} clickAction={id => handleClickAction(id) }/>
             <div className="main-panel">
-                <Nav hamburgerClick={hamburgerClick} searchAction={searchAction}/>
+                <Nav hamburgerClick={hamburgerClick} 
+                    searchAction={searchAction}
+                    uploadClick={handleUploadClick}
+                />
                 <Map id={mapId}/>
                 <div className="state-info-popup">
                     <div id="state">CA</div>
@@ -40,9 +48,16 @@ function App() {
                     <div id="value">Value</div>
                 </div>
             </div>
-            <div id="upload-file">
-                <UploadFile />
-            </div>
+            {
+                showUploadFile ? <div id="upload-file">
+                    <UploadFile />
+                </div>
+
+                :
+
+                ''
+            }
+            
         </div>
     );
 }
