@@ -3,7 +3,7 @@ import Map from "./map";
 import Nav from './nav';
 import SidePanel from './side-panel';
 import UploadFile from './upload-file';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function App() {
     const [showSidePanel, setShowSidePanel] = useState(false);
@@ -32,6 +32,22 @@ function App() {
     const handleUploadClick = () => {
         setShowUploadFile(!showUploadFile);
     }
+
+    useEffect(() => {
+        const uploadFileElement = document.querySelector('.App #upload-file');
+        const bodyOutsideClickHandler = () => {
+            uploadFileElement.remove();
+        }
+        if (uploadFileElement) {
+            document.body.addEventListener('click', bodyOutsideClickHandler);
+        } else {
+            document.body.removeEventListener('click', bodyOutsideClickHandler);
+        }
+
+        return () => {
+            document.body.removeEventListener('click', bodyOutsideClickHandler);
+        }
+    })
 
     return (
         <div className="App">
