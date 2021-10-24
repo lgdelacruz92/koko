@@ -11,6 +11,14 @@
     margin: .5rem;
 }
 
+.navbar .hamburger {
+    width: var(--navbar-height);
+    height: var(--navbar-height);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .search-input {
     display: flex;
     border: 1px solid lightgrey;
