@@ -3,17 +3,18 @@
     --scroll-indicator-height: 1.25rem;
     --navbar-height: 40px;
     --navbar-color: #eee;
+    --upload-file-dialog-width: 14rem;
 }
 
 .App {
-  text-align: center;
-  width: 100vw;
-  height: 100vh;
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+    text-align: center;
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
 .main-panel {

@@ -2,6 +2,7 @@ import "./App.css";
 import Map from "./map";
 import Nav from './nav';
 import SidePanel from './side-panel';
+import UploadFile from './upload-file';
 import { useState } from 'react';
 
 function App() {
@@ -38,6 +39,9 @@ function App() {
                     <div id="county">Santa Barbara</div>
                     <div id="value">Value</div>
                 </div>
+            </div>
+            <div id="upload-file">
+                <UploadFile />
             </div>
         </div>
     );

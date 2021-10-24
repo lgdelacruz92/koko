@@ -24,6 +24,10 @@
     align-items: center;
 }
 
+.nav-buttons > button:hover {
+    background: #bbb;
+}
+
 .search-input {
     display: flex;
     border: 1px solid lightgrey;
