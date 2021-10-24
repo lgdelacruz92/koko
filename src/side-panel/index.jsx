@@ -2,9 +2,10 @@ import './side-panel.css';
 import Feature from './feature';
 import { useRef, useEffect } from 'react';
 
-export default function SidePanel({ show, data }) {
+export default function SidePanel({ show, data, clickAction }) {
     const sidePanelRef = useRef(null);
     const sidePanelContainerRef = useRef(null);
+
 
     useEffect(() => {
         const sidePanelChanged = e => {
@@ -27,6 +28,7 @@ export default function SidePanel({ show, data }) {
                     key={feature.id}
                     title={feature.title}
                     description={feature.description}
+                    clickAction={() => clickAction(feature.id)}
                 />
             })}
         </div>

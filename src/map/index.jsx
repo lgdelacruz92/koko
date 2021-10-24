@@ -25,7 +25,7 @@ function popUp(e, json) {
     }, 2000);
 }
 
-function Map() {
+function Map({ id }) {
     const mapViewBox = useRef(null);
     const mapBoxContainer = useRef(null);
     const minZoom = 1000;
@@ -103,13 +103,12 @@ function Map() {
                 })
         }
 
-        let route = window.location.href.includes('florida') ? 'florida' : '';
-        fetch(process.env.REACT_APP_SERVER + '/state/' + route)
+        fetch(process.env.REACT_APP_SERVER + '/svgs/' + id)
             .then(res => {
                 return res.json();
             })
             .then(json => {
-                mapViewBoxEl.innerHTML = json.row[0].svg;
+                mapViewBoxEl.innerHTML = json.svg.svg;
                 mapViewBoxEl.setAttribute('fill', 'none');
 
                 const pathEls = mapViewBoxEl.querySelectorAll('path');
@@ -141,7 +140,7 @@ function Map() {
             // clean event listener on body
             body.removeEventListener('mouseup', mouseUpAction);
         }
-    },[]);
+    },[id]);
 
     return (
         <div className="map-container" ref={mapBoxContainer}>

@@ -7,6 +7,7 @@ import { useState } from 'react';
 function App() {
     const [showSidePanel, setShowSidePanel] = useState(false);
     const [features, setFeatures] = useState([]);
+    const [mapId, setMapId] = useState('');
 
     const hamburgerClick = () => {
         setShowSidePanel(!showSidePanel);
@@ -22,12 +23,16 @@ function App() {
             .catch(err => console.log(err));
     }
 
+    const handleClickAction = id => {
+        setMapId(`${id}`);
+    }
+
     return (
         <div className="App">
-            <SidePanel show={showSidePanel} data={{ features }}/>
+            <SidePanel show={showSidePanel} data={{ features }} clickAction={id => handleClickAction(id) }/>
             <div className="main-panel">
                 <Nav hamburgerClick={hamburgerClick} searchAction={searchAction}/>
-                <Map />
+                <Map id={mapId}/>
                 <div className="state-info-popup">
                     <div id="state">CA</div>
                     <div id="county">Santa Barbara</div>
