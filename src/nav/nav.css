@@ -11,7 +11,12 @@
     margin: .5rem;
 }
 
-.navbar .hamburger {
+.nav-buttons {
+    display: flex;
+    flex-direction: row;
+}
+
+.nav-buttons > .hamburger, .nav-buttons > .upload {
     width: var(--navbar-height);
     height: var(--navbar-height);
     display: flex;
