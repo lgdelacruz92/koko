@@ -1,6 +1,6 @@
 .side-panel {
     height: 100%;
-    background: var(--navbar-color);
+    background: var(--secondary-color);
     width: 0;
     transition: width .3s ease-in;
     box-shadow: 1px 0px 2px grey;

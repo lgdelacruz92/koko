@@ -2,12 +2,13 @@
     text-align: left;
     padding-left: 1rem;
     padding-right: 1rem;
-    border-bottom: 1px solid grey;
+    border-bottom: 1px solid white;
     padding-bottom: 1rem;
+    color: white;
 }
 
 .feature:hover {
-    background: white;
+    background: var(--secondary-button-hover);
 }
 
 .feature .title {
@@ -16,5 +17,5 @@
 }
 
 .feature .description {
-    color: #444;
+    color: white;
 }

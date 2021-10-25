@@ -14,6 +14,7 @@
 .nav-buttons {
     display: flex;
     flex-direction: row;
+    color: white;
 }
 
 .nav-buttons > .hamburger, .nav-buttons > .upload {
@@ -25,7 +26,7 @@
 }
 
 .nav-buttons > button:hover {
-    background: #bbb;
+    background: var(--secondary-button-hover);
 }
 
 .search-input {
@@ -34,6 +35,7 @@
     padding-top: .25rem;
     padding-bottom: .25rem;
     align-items: center;
+    color: white;
 }
 
 .search-input > .icon {

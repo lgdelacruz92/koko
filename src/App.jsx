@@ -21,6 +21,7 @@ function App() {
             .then(res => res.json())
             .then(json => {
                 setFeatures(json.response);
+                setShowSidePanel(true);
             })
             .catch(err => console.log(err));
     }
