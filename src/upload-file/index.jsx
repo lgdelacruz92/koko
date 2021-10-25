@@ -38,22 +38,34 @@ const validateCsv = (file, callback) => {
     const reader = new FileReader();
     reader.addEventListener('load', (event) => {
         const lines = event.target.result.split('\n');
-        console.log(lines);
         for (let i = 0; i < lines.length; i++) {
             if (!validateCsvLine(lines[i], i).success) {
                 callback(validateCsvLine(lines[i], i));
                 return;
             }
         };
-        callback({ success: true, message: null });
+        callback({ success: true, message: null, lines });
     });
     reader.readAsText(file);
+}
+
+const convertLinesToData = lines => {
+    return lines.map(line => {
+        const tokens = line.split(',');
+        return { 
+            value: tokens[0],
+            state_fips: tokens[1],
+            county_fips: tokens[2]
+        }
+    });
 }
 
 export default function UploadFile() {
     const [workflowIndex, setWorkflowIndex] = useState(0);
     const [fileUploaded, setFileUploaded] = useState(null);
     const [fileInvalid, setFileInvalid] = useState('');
+    const [fileLines, setFileLines] = useState([]);
+    const WORKFLOW_LIMIT = 2;
 
     const workflowPicker = index => {
         if (index === 0) {
@@ -65,6 +77,7 @@ export default function UploadFile() {
                             if (result.success) {
                                 setFileUploaded(e.target.files[0].name);
                                 setFileInvalid('');
+                                setFileLines(result.lines);
                             } else {
                                 setFileUploaded('Invalid data.');
                                 setFileInvalid(result.message);
@@ -77,7 +90,7 @@ export default function UploadFile() {
             </div>;
         } else if (index === 1) {
             if (fileUploaded && fileUploaded !== 'Invalid data.') {
-                return <div><CsvPreview data={[]} /></div>;
+                return <div><CsvPreview data={convertLinesToData(fileLines)} /></div>;
             }
             else if (fileInvalid.length > 0) {
                 return <div className="no-csv"><span>{fileInvalid}</span></div>
@@ -99,10 +112,12 @@ export default function UploadFile() {
                 }
             }}>Back</Button></span>
             <span><Button onClick={() => {
-                if (workflowIndex + 1 < 4) {
+                if (workflowIndex + 1 < WORKFLOW_LIMIT) {
                     setWorkflowIndex(workflowIndex + 1);
+                } else if (workflowIndex === WORKFLOW_LIMIT - 1) {
+                    console.log('Use csv data');
                 }
-            }}>Next</Button></span>
+            }}>{workflowIndex === WORKFLOW_LIMIT - 1 ? 'Done' : 'Next'}</Button></span>
         </div>
     </Paper>;
 }
