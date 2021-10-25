@@ -1,5 +1,5 @@
 .navbar {
-    background: var(--navbar-color);
+    background: var(--secondary-color);
     box-shadow: 1px 0px 3px grey;
     text-align: left;
     height: var(--navbar-height);

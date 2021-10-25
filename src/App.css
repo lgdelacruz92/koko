@@ -4,6 +4,8 @@
     --navbar-height: 40px;
     --navbar-color: #eee;
     --upload-file-dialog-width: 14rem;
+    --secondary-color: rgb(60, 142, 207);
+    --secondary-font-color: white;
 }
 
 .App {
@@ -32,4 +34,15 @@
     background: white;
     pointer-events: none;
     width: 15rem;
+}
+
+table {
+    border-collapse: collapse;
+    border: 1px solid #666;
+}
+
+th, td {
+    font-weight: normal;
+    padding: .25rem;
+    border: 1px solid #666;
 }

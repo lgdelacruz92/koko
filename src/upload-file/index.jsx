@@ -20,10 +20,6 @@ export default function UploadFile() {
             </div>;
         } else if (index === 1) {
             return <div>work-flow 2</div>;
-        } else if (index === 2) {
-            return <div>work-flow 3</div>
-        } else {
-            return <div>work-flow 4</div>
         }
     }
 
