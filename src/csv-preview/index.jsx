@@ -1,6 +1,7 @@
 import './csv-preview.css';
 
 export default function CsvPreview({ data }) {
+
     return <div>
         <table>
             <tbody>
@@ -12,9 +13,9 @@ export default function CsvPreview({ data }) {
                 {data ?
                     data.map((d, i) => {
                         return <tr key={i}>
-                            <td>{d.value}</td>
-                            <td>{d.state_fips}</td>
-                            <td>{d.county_fips}</td>
+                            <td><span>{d.value}</span></td>
+                            <td><span>{d.state_fips}</span></td>
+                            <td><span>{d.county_fips}</span></td>
                         </tr>
                     })
                     :
