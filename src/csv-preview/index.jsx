@@ -2,7 +2,7 @@ import './csv-preview.css';
 
 export default function CsvPreview({ data }) {
 
-    return <div>
+    return <div className="csv-preview-container">
         <table>
             <tbody>
                 <tr>

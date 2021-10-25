@@ -56,3 +56,11 @@ input[type="file"] {
     align-items: center;
     flex-direction: column;
 }
+
+.no-csv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
