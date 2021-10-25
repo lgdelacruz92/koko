@@ -12,10 +12,12 @@ export default function SidePanel({ show, data, clickAction }) {
             const sidePanel = e.filter(observed => {
                 return observed.target === sidePanelRef.current
             })[0];
-            if (sidePanel.contentRect['width'] > 250) {
-                sidePanelContainerRef.current.setAttribute('style', '');
-            } else {
-                sidePanelContainerRef.current.setAttribute('style', 'display: none');
+            if (sidePanel) {
+                if (sidePanel.contentRect['width'] > 250) {
+                    sidePanelContainerRef.current.setAttribute('style', '');
+                } else {
+                    sidePanelContainerRef.current.setAttribute('style', 'display: none');
+                }
             }
         }
         new ResizeObserver(sidePanelChanged).observe(sidePanelRef.current);

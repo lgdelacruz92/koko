@@ -3,7 +3,7 @@ import Map from "./map";
 import Nav from './nav';
 import SidePanel from './side-panel';
 import UploadFile from './upload-file';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 function App() {
     const [showSidePanel, setShowSidePanel] = useState(false);
@@ -29,28 +29,20 @@ function App() {
         setMapId(`${id}`);
     }
 
-    const handleUploadClick = () => {
-        setShowUploadFile(!showUploadFile);
+    const handleUploadClick = e => {
+        if (e.currentTarget.getAttribute('id') === 'nav-upload-button') {
+            setShowUploadFile(true);
+        }
     }
 
-    useEffect(() => {
-        const uploadFileElement = document.querySelector('.App #upload-file');
-        const bodyOutsideClickHandler = () => {
-            uploadFileElement.remove();
+    const appClick = e => {
+        if (showUploadFile && e.target.classList.contains('map-view-box')) {
+            setShowUploadFile(false);
         }
-        if (uploadFileElement) {
-            document.body.addEventListener('click', bodyOutsideClickHandler);
-        } else {
-            document.body.removeEventListener('click', bodyOutsideClickHandler);
-        }
-
-        return () => {
-            document.body.removeEventListener('click', bodyOutsideClickHandler);
-        }
-    })
+    }
 
     return (
-        <div className="App">
+        <div className="App" onClick={appClick}>
             <SidePanel show={showSidePanel} data={{ features }} clickAction={id => handleClickAction(id) }/>
             <div className="main-panel">
                 <Nav hamburgerClick={hamburgerClick} 
@@ -64,15 +56,11 @@ function App() {
                     <div id="value">Value</div>
                 </div>
             </div>
-            {
-                showUploadFile ? <div id="upload-file">
-                    <UploadFile />
-                </div>
-
-                :
-
-                ''
-            }
+            <div id="upload-file">
+                {showUploadFile ? 
+                    <UploadFile /> : <div></div>
+                }
+            </div>
             
         </div>
     );
