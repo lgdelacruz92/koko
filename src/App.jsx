@@ -42,6 +42,10 @@ function App() {
         }
     }
 
+    const doneClick = () => {
+        setShowUploadFile(false);
+    }
+
     return (
         <div className="App" onClick={appClick}>
             <SidePanel show={showSidePanel} data={{ features }} clickAction={id => handleClickAction(id) }/>
@@ -59,7 +63,7 @@ function App() {
             </div>
             <div id="upload-file">
                 {showUploadFile ? 
-                    <UploadFile /> : <div></div>
+                    <UploadFile doneClick={doneClick}/> : <div></div>
                 }
             </div>
             

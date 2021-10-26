@@ -60,7 +60,7 @@ const convertLinesToData = lines => {
     });
 }
 
-export default function UploadFile() {
+export default function UploadFile({ doneClick }) {
     const [workflowIndex, setWorkflowIndex] = useState(0);
     const [fileUploaded, setFileUploaded] = useState(null);
     const [fileInvalid, setFileInvalid] = useState('');
@@ -86,10 +86,10 @@ export default function UploadFile() {
                         validateCsv(e.target.files[0], resultCallback);
                     }}></input>
                 </label>
-                <div className="file-uploaded">{fileUploaded ? (fileUploaded === 'Invalid data.' ? <span style={{ color: 'red' }}>{fileUploaded}</span> : fileUploaded) : ''}</div>
+                <div className="file-uploaded">{fileUploaded ? (fileUploaded === 'Invalid data.' ? csvDebugMessage() : fileUploaded) : ''}</div>
             </div>;
         } else if (index === 1) {
-            if (fileUploaded && fileUploaded !== 'Invalid data.') {
+            if (csvIsValid()) {
                 return <div><CsvPreview data={convertLinesToData(fileLines)} /></div>;
             }
             else if (fileInvalid.length > 0) {
@@ -101,23 +101,45 @@ export default function UploadFile() {
         }
     }
 
+    const csvDebugMessage = () => {
+        return <div style={{ color: 'red', margin: '1rem' }}>
+            <span>{fileUploaded + ' ' +  fileInvalid}</span>
+        </div>
+    }
+
+    const csvIsValid = () => {
+        return fileUploaded && fileUploaded !== 'Invalid data.'
+    }
+
+    const isLastWorkflow = () => {
+        return workflowIndex === WORKFLOW_LIMIT - 1;
+    }
+
+    const onBackClick = () => {
+        if (workflowIndex - 1 >= 0) {
+            setWorkflowIndex(workflowIndex - 1);
+        }
+    }
+
+    const onForwardClick = () => {
+        if (workflowIndex + 1 < WORKFLOW_LIMIT) {
+            setWorkflowIndex(workflowIndex + 1);
+        } else if (isLastWorkflow()) {
+            doneClick();
+        }
+    }
+
+    const nextDisabled = () => {
+        return !isLastWorkflow() && !csvIsValid();
+    }
+
     return <Paper className="upload-file-dialog" elevation={3}>
         <div className="workflow">
             {workflowPicker(workflowIndex)}
         </div>
         <div className="actions">
-            <span><Button onClick={() => {
-                if (workflowIndex - 1 >= 0) {
-                    setWorkflowIndex(workflowIndex - 1);
-                }
-            }}>Back</Button></span>
-            <span><Button onClick={() => {
-                if (workflowIndex + 1 < WORKFLOW_LIMIT) {
-                    setWorkflowIndex(workflowIndex + 1);
-                } else if (workflowIndex === WORKFLOW_LIMIT - 1) {
-                    console.log('Use csv data');
-                }
-            }}>{workflowIndex === WORKFLOW_LIMIT - 1 ? 'Done' : 'Next'}</Button></span>
+            <span><Button onClick={onBackClick}>Back</Button></span>
+            <span><Button onClick={onForwardClick} disabled={nextDisabled()}>{isLastWorkflow() ? 'Done' : 'Next'}</Button></span>
         </div>
     </Paper>;
 }
