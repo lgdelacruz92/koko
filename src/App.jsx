@@ -54,6 +54,8 @@ function App() {
         
         axios.post(process.env.REACT_APP_SERVER + '/use', { data }, config)
             .then(response => {
+                // Get a session token here
+                // Use that as reference for fetching
                 console.log(response);
             })
             .catch(e => {
