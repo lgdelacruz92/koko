@@ -69,7 +69,7 @@ export default function UploadFile({ doneClick }) {
     const [workflowIndex, setWorkflowIndex] = useState(0);
     const [fileUploaded, setFileUploaded] = useState(null);
     const [fileInvalid, setFileInvalid] = useState('');
-    const [fileLines, setFileLines] = useState([]);
+    const [data, setData] = useState([]);
     const WORKFLOW_LIMIT = 2;
 
     const workflowPicker = index => {
@@ -82,7 +82,7 @@ export default function UploadFile({ doneClick }) {
                             if (result.success) {
                                 setFileUploaded(e.target.files[0].name);
                                 setFileInvalid('');
-                                setFileLines(result.lines);
+                                setData(convertLinesToData(result.lines));
                             } else {
                                 setFileUploaded('Invalid data.');
                                 setFileInvalid(result.message);
@@ -95,7 +95,7 @@ export default function UploadFile({ doneClick }) {
             </div>;
         } else if (index === 1) {
             if (csvIsValid()) {
-                return <div><CsvPreview data={convertLinesToData(fileLines)} /></div>;
+                return <div><CsvPreview data={data} /></div>;
             }
             else if (fileInvalid.length > 0) {
                 return <div className="no-csv"><span>{fileInvalid}</span></div>
@@ -130,7 +130,7 @@ export default function UploadFile({ doneClick }) {
         if (workflowIndex + 1 < WORKFLOW_LIMIT) {
             setWorkflowIndex(workflowIndex + 1);
         } else if (isLastWorkflow()) {
-            doneClick();
+            doneClick(data);
         }
     }
 

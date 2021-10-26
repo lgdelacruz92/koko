@@ -4,6 +4,7 @@ import Nav from './nav';
 import SidePanel from './side-panel';
 import UploadFile from './upload-file';
 import { useState } from 'react';
+import axios from 'axios';
 
 function App() {
     const [showSidePanel, setShowSidePanel] = useState(false);
@@ -42,8 +43,22 @@ function App() {
         }
     }
 
-    const doneClick = () => {
+    const doneClick = data => {
         setShowUploadFile(false);
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        }
+        
+        axios.post(process.env.REACT_APP_SERVER + '/use', { data }, config)
+            .then(response => {
+                console.log(response);
+            })
+            .catch(e => {
+                console.log(e);
+            });
     }
 
     return (
