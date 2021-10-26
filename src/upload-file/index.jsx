@@ -10,7 +10,7 @@ const validateCsvLine = (line, lineno) => {
     const tokens = line.split(',');
     const warningMsg = 'If you have headers on your csv, please delete it.';
     lineno += 1;
-    let okay = assert(tokens.length === 3, `At line ${lineno} invalid number of columns in your csv`);
+    let okay = assert(tokens.length === 4, `At line ${lineno} invalid number of columns in your csv`);
     if (!okay.success) {
         return okay;
     }
@@ -18,19 +18,23 @@ const validateCsvLine = (line, lineno) => {
     if (!okay.success) {
         return okay;
     }
-    okay = assert(isNumber(tokens[1]), `Invalid value for 'State Fips' at line ${lineno}. Must be int. ${warningMsg}`);
+    okay = assert(tokens[1].length === `${parseFloat(tokens[1])}`.length, `Invalid value for 'Percent' at line ${lineno}. Must be float. ${warningMsg}`);
     if (!okay.success) {
         return okay;
     }
-    okay = assert(tokens[1].length === 2, `Invalid value for 'State Fips' at line ${lineno}. 'State Fips' are two digit integers. ${warningMsg}`);
+    okay = assert(isNumber(tokens[2]), `Invalid value for 'State Fips' at line ${lineno}. Must be int. ${warningMsg}`);
     if (!okay.success) {
         return okay;
     }
-    okay = assert(isNumber(tokens[2]), `Invalid value for 'County Fips' at line ${lineno}. Must be int. ${warningMsg}`);
+    okay = assert(tokens[2].length === 2, `Invalid value for 'State Fips' at line ${lineno}. 'State Fips' are two digit integers. ${warningMsg}`);
     if (!okay.success) {
         return okay;
     }
-    okay = assert(tokens[2].length === 3, `Invalid value for 'County Fips' at line ${lineno}. 'County Fips' are three digit integers. ${warningMsg}`);
+    okay = assert(isNumber(tokens[3]), `Invalid value for 'County Fips' at line ${lineno}. Must be int. ${warningMsg}`);
+    if (!okay.success) {
+        return okay;
+    }
+    okay = assert(tokens[3].length === 3, `Invalid value for 'County Fips' at line ${lineno}. 'County Fips' are three digit integers. ${warningMsg}`);
     return okay;
 }
 
@@ -54,8 +58,9 @@ const convertLinesToData = lines => {
         const tokens = line.split(',');
         return { 
             value: tokens[0],
-            state_fips: tokens[1],
-            county_fips: tokens[2]
+            percent: tokens[1],
+            state_fips: tokens[2],
+            county_fips: tokens[3]
         }
     });
 }

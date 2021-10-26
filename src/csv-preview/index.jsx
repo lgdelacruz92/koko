@@ -7,6 +7,7 @@ export default function CsvPreview({ data }) {
             <tbody>
                 <tr>
                     <th>Value</th>
+                    <th>Percent</th>
                     <th>State Fips</th>
                     <th>County Fips</th>
                 </tr>
@@ -14,6 +15,7 @@ export default function CsvPreview({ data }) {
                     data.map((d, i) => {
                         return <tr key={i}>
                             <td><span>{d.value}</span></td>
+                            <td><span>{d.percent}</span></td>
                             <td><span>{d.state_fips}</span></td>
                             <td><span>{d.county_fips}</span></td>
                         </tr>
