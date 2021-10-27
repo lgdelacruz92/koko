@@ -6,19 +6,32 @@ import { assert } from '../utils/utils';
 
 const isNumber = val => /^\d+$/.test(val);
 
+function isFloat(val) {
+    const floatRegex = /^-?\d+(?:[.,]\d*?)?$/;
+    if (!floatRegex.test(val))
+        return false;
+
+    val = parseFloat(val);
+    if (isNaN(val))
+        return false;
+    return true;
+}
+
+
 const validateCsvLine = (line, lineno) => {
     const tokens = line.split(',');
-    const warningMsg = 'If you have headers on your csv, please delete it.';
+    const warningMsg = 'If you have headers on your csv, please delete it.\nIf you have quotations remove them.\nIf you have an empty lines, remove them.';
     lineno += 1;
+
     let okay = assert(tokens.length === 4, `At line ${lineno} invalid number of columns in your csv`);
     if (!okay.success) {
         return okay;
     }
-    okay = assert(tokens[0].length === `${parseFloat(tokens[0])}`.length, `Invalid value for 'Value' at line ${lineno}. Must be float. ${warningMsg}`);
+    okay = assert(isFloat(tokens[0]), `Invalid value for 'Value' at line ${lineno}. Must be float. ${warningMsg}`);
     if (!okay.success) {
         return okay;
     }
-    okay = assert(tokens[1].length === `${parseFloat(tokens[1])}`.length, `Invalid value for 'Percent' at line ${lineno}. Must be float. ${warningMsg}`);
+    okay = assert(isFloat(tokens[1]), `Invalid value for 'Percent' at line ${lineno}. Must be float. ${warningMsg}`);
     if (!okay.success) {
         return okay;
     }
@@ -77,7 +90,9 @@ export default function UploadFile({ doneClick }) {
             return <div className="upload-file-workflow">
                 <label className="csv-upload">
                     Upload CSV
-                    <input type="file" accept="text/csv" onChange={e => {
+                    <input type="file" accept="text/csv" onClick={e => {
+                        e.target.value = '';
+                    }} onChange={e => {
                         const resultCallback = result => {
                             if (result.success) {
                                 setFileUploaded(e.target.files[0].name);
