@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ScrollIndicator from './scroll-indicator';
 import Legend from './legend';
 import ZoomOut from './zoom-out';
@@ -29,6 +29,7 @@ function popUp(e, json) {
 function Map({ id }) {
     const mapViewBox = useRef(null);
     const mapBoxContainer = useRef(null);
+    const [reset, setReset] = useState(0); // Only use to reset the page
     const minZoom = 1000;
     const maxZoom = 300;
 
@@ -44,8 +45,8 @@ function Map({ id }) {
         mapViewBox.current.setAttribute('viewBox', newViewBoxDim.join(' '));
     }
 
-    const onZoomOutClick = e => {
-        mapViewBox.current.setAttribute('viewBox', '0 0 1000 1000');
+    const onZoomOutClick = () => {
+        setReset(reset+1);
     }
 
     useEffect(() => {
