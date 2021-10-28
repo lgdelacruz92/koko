@@ -72,7 +72,7 @@ def main():
             '}\n'
         ]
         start_code_str = ''.join(start_code)
-        os.system(f'echo "{start_code_str}" > src/{args.name}/{camel_case_name}.jsx')
+        os.system(f'echo "{start_code_str}" > src/{args.name}/index.jsx')
         os.system(f'touch src/{args.name}/{args.name}.css')
     except Exception as e:
         raise NotKokoProjectException()
