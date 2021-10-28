@@ -154,7 +154,7 @@ function Map({ id }) {
         <div className="map-container" ref={mapBoxContainer}>
             <ScrollIndicator mapBoxContainerRef={mapBoxContainer} valueUpdate={onScrollUpdate}></ScrollIndicator>
             <Legend />
-            <svg className="map-view-box" ref={mapViewBox} viewBox="0 0 1000 1000" fill="#000">
+            <svg className="map-view-box" ref={mapViewBox} viewBox="0 0 900 900" fill="#000">
             </svg>
             <ZoomOut onClick={onZoomOutClick}/>
         </div> 

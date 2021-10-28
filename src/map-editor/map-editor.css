@@ -1,4 +1,8 @@
 .map-editor {
     width: 100%;
     height: 100%;
+    border: 2px solid red; /* TODO: remove after debugging */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
