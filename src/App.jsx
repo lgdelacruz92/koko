@@ -1,5 +1,5 @@
 import "./App.css";
-import Map from "./map";
+import MapEditor from "./map-editor";
 import Nav from './nav';
 import SidePanel from './side-panel';
 import UploadFile from './upload-file';
@@ -11,6 +11,7 @@ function App() {
     const [features, setFeatures] = useState([]);
     const [mapId, setMapId] = useState('');
     const [showUploadFile, setShowUploadFile] = useState(false);
+    const [majorError, setMajorError] = useState(false);
 
     const hamburgerClick = () => {
         setShowSidePanel(!showSidePanel);
@@ -54,12 +55,10 @@ function App() {
         
         axios.post(process.env.REACT_APP_SERVER + '/use', { data }, config)
             .then(response => {
-                // Get a session token here
-                // Use that as reference for fetching
-                console.log(response);
+                localStorage.setItem('session', response.data.session);
             })
             .catch(e => {
-                console.log(e);
+                setMajorError(true);
             });
     }
 
@@ -71,7 +70,7 @@ function App() {
                     searchAction={searchAction}
                     uploadClick={handleUploadClick}
                 />
-                <Map id={mapId}/>
+                { !majorError ? <MapEditor mapId={mapId} /> : <div>Major error happened. If this persist, please contact us.</div> }
                 <div className="state-info-popup">
                     <div id="state">CA</div>
                     <div id="county">Santa Barbara</div>

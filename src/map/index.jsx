@@ -70,11 +70,13 @@ function Map({ id }) {
                 const changeX = parseInt(e.clientX - startX);
                 const changeY = parseInt(e.clientY - startY);
                 mapViewBoxEl.setAttribute('viewBox', `${-changeX + startViewBoxX} ${-changeY + startViewBoxY} ${attrArray[2]} ${attrArray[3]}`);
+                mapViewBoxEl.setAttribute('style', 'cursor: grab');
             }
         }
 
         const mouseUpAction = e => {
             mouseDown = false;
+            mapViewBoxEl.setAttribute('style', '');
         }
 
         // Attach event listeners
