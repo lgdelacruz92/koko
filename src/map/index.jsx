@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import ScrollIndicator from './scroll-indicator';
 import Legend from './legend';
+import ZoomOut from './zoom-out';
 import './map.css';
 
 function popUp(e, json) {
@@ -41,6 +42,10 @@ function Map({ id }) {
         const zoomVal = rangeVal + maxZoom; // offset it based on min
         const newViewBoxDim = [viewBoxDim[0], viewBoxDim[1], zoomVal, zoomVal];
         mapViewBox.current.setAttribute('viewBox', newViewBoxDim.join(' '));
+    }
+
+    const onZoomOutClick = e => {
+        mapViewBox.current.setAttribute('viewBox', '0 0 1000 1000');
     }
 
     useEffect(() => {
@@ -150,6 +155,7 @@ function Map({ id }) {
             <Legend />
             <svg className="map-view-box" ref={mapViewBox} viewBox="0 0 1000 1000" fill="#000">
             </svg>
+            <ZoomOut onClick={onZoomOutClick}/>
         </div> 
     )
 }
