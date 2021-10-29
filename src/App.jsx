@@ -70,7 +70,7 @@ function App() {
                     searchAction={searchAction}
                     uploadClick={handleUploadClick}
                 />
-                { !majorError ? <MapEditor stateFips={mapId} /> : <div>Major error happened. If this persist, please contact us.</div> }
+                { !majorError ? <MapEditor stateFips={mapId}/> : <div>Major error happened. If this persist, please contact us.</div> }
                 <div className="state-info-popup">
                     <div id="state">CA</div>
                     <div id="county">Santa Barbara</div>
