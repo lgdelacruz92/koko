@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import ScrollIndicator from './scroll-indicator';
 import Legend from './legend';
 import ZoomOut from './zoom-out';
@@ -20,7 +20,7 @@ function popUp(e, json) {
     // Update the values
     popup.querySelector('#state').innerText = json.state_name;
     popup.querySelector('#county').innerText = json.county_name;
-    popup.querySelector('#value').innerText = `${json.value}%`;
+    popup.querySelector('#value').innerText = `${json.percent}%`;
 
     window.popupTimeout = setTimeout(() => {
         popup.setAttribute('style', 'display: none');
@@ -30,6 +30,7 @@ function popUp(e, json) {
 function Map({ stateFips }) {
     const mapViewBox = useRef(null);
     const mapBoxContainer = useRef(null);
+    const [data, setData] = useState(null);
     const minZoom = 1000;
     const maxZoom = 300;
     const viewBoxSize = '0 0 600 600';
@@ -50,8 +51,9 @@ function Map({ stateFips }) {
         mapViewBox.current.setAttribute('viewBox', viewBoxSize);
     }
 
+
+
     useEffect(() => {
-        console.log('re rendered');
         let mouseDown = false;
         let startX = 0;
         let startY = 0;
@@ -96,28 +98,22 @@ function Map({ stateFips }) {
         const body = document.querySelector('body');
         body.addEventListener('mouseup', mouseUpAction);
 
-        // event callback for paths
-        const pathEventCallback = e => {
-            const fips = e.target.getAttribute('id');
-            const state_fips = fips.substring(0, 2);
-            const county_fips = fips.substring(2);
-            fetch(process.env.REACT_APP_SERVER + `/state/${state_fips}/county/${county_fips}`)
-                .then(resp => {
-                    return resp.json();
-                })
-                .then(json => {
-                    popUp(e, json);
-                })
-                .catch(e => {
-                    console.log(e);
-                })
-        }
-
         const sessionKey = localStorage.getItem('session');
         const params = {
             session: sessionKey
         }
 
+            // event callback for paths
+        const pathEventCallback = e => {
+            const fips = e.target.getAttribute('id');
+            if (data && data[fips]) {
+                popUp(e, data[fips]);
+            } else {
+                console.log(`${fips} is ${data}`)
+            }
+        }
+
+        console.log(`${stateFips} changed`)
         axios.post(process.env.REACT_APP_SERVER + '/make/' + stateFips, params)
             .then(res => {
                 mapViewBoxEl.innerHTML = res.data;
@@ -135,6 +131,19 @@ function Map({ stateFips }) {
                 if (mapViewBoxEl.innerHTML === '') {
                     console.log('error')
                 }
+            })
+
+        axios.post(process.env.REACT_APP_SERVER + '/data/' + stateFips, params)
+            .then(res => {
+                const reducer = (prev, cur) => {
+                    prev[cur.state_fips + cur.county_fips] = { ...cur };
+                    return prev;
+                }
+                // transform data to a map
+                setData(res.data.data.reduce(reducer, {}));
+            })
+            .catch(err => {
+                console.log(err);
             })
 
         return () => {
