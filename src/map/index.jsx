@@ -122,7 +122,11 @@ function Map({ stateFips }) {
 
         axios.post(process.env.REACT_APP_SERVER + '/make/' + stateFips, params)
             .then(res => {
-                mapViewBoxEl.innerHTML = res.data;
+                const tempel = document.createElement('div');
+                tempel.innerHTML = res.data;
+                mapViewBoxEl.innerHTML = '';
+                const svgContents = tempel.querySelector('svg');
+                mapViewBoxEl.innerHTML = svgContents.innerHTML;
             })
             .catch(err => {
                 console.log(err);

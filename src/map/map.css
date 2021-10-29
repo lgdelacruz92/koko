@@ -12,3 +12,8 @@
 .please-wait-message {
     font: 2rem sans-serif;
 }
+
+.map-view-box path:hover {
+    stroke: #646464;
+    stroke-width: 2px;
+}
