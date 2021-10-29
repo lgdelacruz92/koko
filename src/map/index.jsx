@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import ScrollIndicator from './scroll-indicator';
 import Legend from './legend';
 import ZoomOut from './zoom-out';
 import './map.css';
+import axios from 'axios';
 
 function popUp(e, json) {
     if (window.popupTimeout) {
@@ -26,12 +27,12 @@ function popUp(e, json) {
     }, 2000);
 }
 
-function Map({ id }) {
+function Map({ stateFips }) {
     const mapViewBox = useRef(null);
     const mapBoxContainer = useRef(null);
-    const [reset, setReset] = useState(0); // Only use to reset the page
     const minZoom = 1000;
     const maxZoom = 300;
+    const viewBoxSize = '0 0 600 600';
 
     const onScrollUpdate = (val) => {
         const viewBoxAttr = mapViewBox.current.getAttribute('viewBox');
@@ -46,10 +47,11 @@ function Map({ id }) {
     }
 
     const onZoomOutClick = () => {
-        setReset(reset+1);
+        mapViewBox.current.setAttribute('viewBox', viewBoxSize);
     }
 
     useEffect(() => {
+        console.log('re rendered');
         let mouseDown = false;
         let startX = 0;
         let startY = 0;
@@ -111,12 +113,14 @@ function Map({ id }) {
                 })
         }
 
-        fetch(process.env.REACT_APP_SERVER + '/svgs/' + id)
+        const sessionKey = localStorage.getItem('session');
+        const params = {
+            session: sessionKey
+        }
+
+        axios.post(process.env.REACT_APP_SERVER + '/make/' + stateFips, params)
             .then(res => {
-                return res.json();
-            })
-            .then(json => {
-                mapViewBoxEl.innerHTML = json.svg.svg;
+                mapViewBoxEl.innerHTML = res.data;
                 mapViewBoxEl.setAttribute('fill', 'none');
 
                 const pathEls = mapViewBoxEl.querySelectorAll('path');
@@ -148,13 +152,13 @@ function Map({ id }) {
             // clean event listener on body
             body.removeEventListener('mouseup', mouseUpAction);
         }
-    },[id]);
+    },[stateFips]);
 
     return (
         <div className="map-container" ref={mapBoxContainer}>
             <ScrollIndicator mapBoxContainerRef={mapBoxContainer} valueUpdate={onScrollUpdate}></ScrollIndicator>
             <Legend />
-            <svg className="map-view-box" ref={mapViewBox} viewBox="0 0 900 900" fill="#000">
+            <svg className="map-view-box" ref={mapViewBox} viewBox={viewBoxSize} fill="#000">
             </svg>
             <ZoomOut onClick={onZoomOutClick}/>
         </div> 
