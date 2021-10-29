@@ -31,9 +31,10 @@ function Map({ stateFips }) {
     const mapViewBox = useRef(null);
     const mapBoxContainer = useRef(null);
     const [data, setData] = useState(null);
-    const minZoom = 1000;
+    const minZoom = 1060;
     const maxZoom = 300;
-    const viewBoxSize = '0 0 600 600';
+    const viewBoxSize = `0 0 ${minZoom} ${minZoom}`;
+    console.log(viewBoxSize);
 
     const onScrollUpdate = (val) => {
         const viewBoxAttr = mapViewBox.current.getAttribute('viewBox');
@@ -52,6 +53,22 @@ function Map({ stateFips }) {
     }
 
 
+    // event callback for paths
+    const pathEventCallback = e => {
+        const fips = e.target.getAttribute('id');
+        if (data && data[fips]) {
+            popUp(e, data[fips]);
+        } else {
+            console.log(`${fips} is ${data}`)
+        }
+    }
+
+    const handleMouseMove = e => {
+        const fips = e.target.getAttribute('id');
+        if (e.target.tagName.toLowerCase() === 'path' && fips && fips.length === 5) {
+            pathEventCallback(e);
+        }
+    }
 
     useEffect(() => {
         let mouseDown = false;
@@ -103,26 +120,9 @@ function Map({ stateFips }) {
             session: sessionKey
         }
 
-            // event callback for paths
-        const pathEventCallback = e => {
-            const fips = e.target.getAttribute('id');
-            if (data && data[fips]) {
-                popUp(e, data[fips]);
-            } else {
-                console.log(`${fips} is ${data}`)
-            }
-        }
-
-        console.log(`${stateFips} changed`)
         axios.post(process.env.REACT_APP_SERVER + '/make/' + stateFips, params)
             .then(res => {
                 mapViewBoxEl.innerHTML = res.data;
-                mapViewBoxEl.setAttribute('fill', 'none');
-
-                const pathEls = mapViewBoxEl.querySelectorAll('path');
-                pathEls.forEach(pathEl => {
-                    pathEl.addEventListener('mouseover', pathEventCallback);
-                });
             })
             .catch(err => {
                 console.log(err);
@@ -147,12 +147,6 @@ function Map({ stateFips }) {
             })
 
         return () => {
-            // clean event listeners
-            const pathEls = mapViewBoxEl.querySelectorAll('path');
-            pathEls.forEach(pathEl => {
-                pathEl.removeEventListener('mouseover', pathEventCallback);
-            });
-
             // clean mapViewBoxEl listeners
             mapViewBoxEl.removeEventListener('mousedown', mouseDownAction);
             mapViewBoxEl.removeEventListener('mousemove', mouseMoveAction);
@@ -167,7 +161,7 @@ function Map({ stateFips }) {
         <div className="map-container" ref={mapBoxContainer}>
             <ScrollIndicator mapBoxContainerRef={mapBoxContainer} valueUpdate={onScrollUpdate}></ScrollIndicator>
             <Legend />
-            <svg className="map-view-box" ref={mapViewBox} viewBox={viewBoxSize} fill="#000">
+            <svg className="map-view-box" ref={mapViewBox} onMouseMove={handleMouseMove} viewBox={viewBoxSize} fill="#000">
             </svg>
             <ZoomOut onClick={onZoomOutClick}/>
         </div> 
