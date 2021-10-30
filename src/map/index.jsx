@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import ScrollIndicator from './scroll-indicator';
+import ZoomControls from '../zoom-controls';
 import Legend from './legend';
 import ZoomOut from './zoom-out';
 import './map.css';
@@ -28,36 +29,29 @@ function popUp(e, json) {
     }, 2000);
 }
 
+function scale(number, inMin, inMax, outMin, outMax) {
+    return (number - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
+}
+
 const calcColor = (val, max_val) => {
     const limit = 120;
     return limit - Math.floor(val * limit / max_val);
 }
 
 function Map({ stateFips }) {
-    const mapViewBox = useRef(null);
-    const mapBoxContainer = useRef(null);
-    const [countyData, setCountyData] = useState(null);
     const minZoom = 1060;
     const maxZoom = 300;
-    const viewBoxSize = `0 0 ${minZoom} ${minZoom}`;
 
-    const onScrollUpdate = (val) => {
-        const viewBoxAttr = mapViewBox.current.getAttribute('viewBox');
-        const viewBoxDim = viewBoxAttr.split(' ');
+    const initialViewBox = `0 0 ${minZoom} ${minZoom}`
 
-        // map val to min max zooms
-        const range = minZoom - maxZoom; // backward but min is bigger
-        const rangeVal = range * (val / 100); // 100 is scroll indicator max
-        const zoomVal = rangeVal + maxZoom; // offset it based on min
-        const newViewBoxDim = [viewBoxDim[0], viewBoxDim[1], zoomVal, zoomVal];
-        mapViewBox.current.setAttribute('viewBox', newViewBoxDim.join(' '));
+    const mapViewBox = useRef(null);
+    const [countyData, setCountyData] = useState(null);
+    const [zoomVal, setZoomVal] = useState(0);
+    const [viewBox, setViewBox] = useState(initialViewBox);
+
+    const onRecenterClick = () => {
+        setViewBox(initialViewBox);
     }
-
-    const onZoomOutClick = () => {
-        mapViewBox.current.setAttribute('viewBox', viewBoxSize);
-        setCountyData(null);
-    }
-
 
     // event callback for paths
     const pathEventCallback = e => {
@@ -75,6 +69,39 @@ function Map({ stateFips }) {
             pathEventCallback(e);
         }
     }
+
+
+
+    const onZoomOutClick = () => {
+        if (zoomVal - 5 >= 0) {
+            setZoomVal(zoomVal - 5); // Zoom out 5 units
+        }
+    }
+
+    const onZoomInClick = () => {
+        if (zoomVal + 5 <= 100) {
+            setZoomVal(zoomVal + 5); // Zoom in 5 units
+        }
+    }
+
+    useEffect(() => {
+        const updateViewBox = val => {
+            const viewBoxAttr = mapViewBox.current.getAttribute('viewBox');
+            const viewBoxDim = viewBoxAttr.split(' ');
+
+            const mappedZoom = scale(val, 0, 100, minZoom, maxZoom);
+            const newViewBoxDim = [viewBoxDim[0], viewBoxDim[1], mappedZoom, mappedZoom];
+            setViewBox(`${newViewBoxDim.join(' ')}`);
+        }
+
+        updateViewBox(zoomVal);
+    }, [zoomVal]);
+
+    useEffect(() => {
+        if (viewBox === initialViewBox) {
+            setZoomVal(0);
+        }
+    }, [viewBox, initialViewBox])
 
     useEffect(() => {
         let mouseDown = false;
@@ -171,12 +198,15 @@ function Map({ stateFips }) {
     },[stateFips]);
 
     return (
-        <div className="map-container" ref={mapBoxContainer}>
-            <ScrollIndicator mapBoxContainerRef={mapBoxContainer} valueUpdate={onScrollUpdate}></ScrollIndicator>
+        <div className="map-container">
+            <ScrollIndicator value={zoomVal}></ScrollIndicator>
             <Legend />
-            <svg id="map-view-box" ref={mapViewBox} onMouseMove={handleMouseMove} viewBox={viewBoxSize} fill="#000">
+            <svg id="map-view-box" ref={mapViewBox} onMouseMove={handleMouseMove} viewBox={viewBox} fill="#000">
             </svg>
-            <ZoomOut onClick={onZoomOutClick}/>
+            <div className="zoom-controls-container">
+                <ZoomControls upAction={onZoomInClick} downAction={onZoomOutClick} />
+                <ZoomOut onClick={onRecenterClick}/>
+            </div>
         </div> 
     )
 }

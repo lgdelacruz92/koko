@@ -17,3 +17,10 @@
     stroke: #646464;
     stroke-width: 2px;
 }
+
+.zoom-controls-container {
+    position: absolute;
+    background: white;
+    right: 1rem;
+    bottom: 1rem;
+}

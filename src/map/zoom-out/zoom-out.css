@@ -1,7 +1,4 @@
 .zoom-out-button {
-    position: absolute;
-    right: 1rem;
-    bottom: 1rem;
     border-radius: 3px;
     box-shadow: 1px 1px 1px grey;
 }

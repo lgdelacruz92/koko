@@ -1,0 +1,17 @@
+.zoom-controls {
+    box-shadow: 2px 2px 3px grey;
+    border-radius: .1rem;
+    display: inline-block;
+}
+
+.zoom-controls > .button:last-child {
+    border-top: 1px solid lightgrey;
+}
+
+.zoom-controls > .button:hover {
+    box-shadow: 3px 3px 4px grey;
+}
+
+#zoom-out {
+    transform: rotate(-90deg);
+}
