@@ -3,7 +3,7 @@
     height: calc(100% - var(--navbar-height));
 }
 
-.map-view-box {
+#map-view-box {
     width: 100%;
     height: 100%;
     cursor: default;

@@ -4,6 +4,7 @@ import Legend from './legend';
 import ZoomOut from './zoom-out';
 import './map.css';
 import axios from 'axios';
+import * as d3 from 'd3';
 
 function popUp(e, json) {
     if (window.popupTimeout) {
@@ -27,14 +28,18 @@ function popUp(e, json) {
     }, 2000);
 }
 
+const calcColor = (val, max_val) => {
+    const limit = 120;
+    return limit - Math.floor(val * limit / max_val);
+}
+
 function Map({ stateFips }) {
     const mapViewBox = useRef(null);
     const mapBoxContainer = useRef(null);
-    const [data, setData] = useState(null);
+    const [countyData, setCountyData] = useState(null);
     const minZoom = 1060;
     const maxZoom = 300;
     const viewBoxSize = `0 0 ${minZoom} ${minZoom}`;
-    console.log(viewBoxSize);
 
     const onScrollUpdate = (val) => {
         const viewBoxAttr = mapViewBox.current.getAttribute('viewBox');
@@ -50,16 +55,17 @@ function Map({ stateFips }) {
 
     const onZoomOutClick = () => {
         mapViewBox.current.setAttribute('viewBox', viewBoxSize);
+        setCountyData(null);
     }
 
 
     // event callback for paths
     const pathEventCallback = e => {
         const fips = e.target.getAttribute('id');
-        if (data && data[fips]) {
-            popUp(e, data[fips]);
+        if (countyData && countyData[fips]) {
+            popUp(e, countyData[fips]);
         } else {
-            console.log(`${fips} is ${data}`)
+            console.log(`${fips} is ${countyData}`)
         }
     }
 
@@ -122,11 +128,27 @@ function Map({ stateFips }) {
 
         axios.post(process.env.REACT_APP_SERVER + '/make/' + stateFips, params)
             .then(res => {
-                const tempel = document.createElement('div');
-                tempel.innerHTML = res.data;
-                mapViewBoxEl.innerHTML = '';
-                const svgContents = tempel.querySelector('svg');
-                mapViewBoxEl.innerHTML = svgContents.innerHTML;
+                const map = d3.select('#map-view-box');
+
+                const countyData = res.data.countyData;
+                map.html('');
+                map.selectAll('path')
+                    .data(res.data.geojson.features)
+                    .enter()
+                    .append('path')
+                    .attr('d', d3.geoPath())
+                    .attr('id', county => county.id)
+                    .attr('fill', county => {
+                        const countyFips = county.id;
+                        const countyPercent = parseFloat(countyData[countyFips].percent);
+                        const countyMaxPercent = parseFloat(res.data.max_val);
+                        const h = calcColor(countyPercent, countyMaxPercent);
+                        if (isNaN(h)) {
+                            debugger;
+                        }
+                        return `hsl(${h},90%,61%)`
+                    })
+                setCountyData(countyData);
             })
             .catch(err => {
                 console.log(err);
@@ -135,19 +157,6 @@ function Map({ stateFips }) {
                 if (mapViewBoxEl.innerHTML === '') {
                     console.log('error')
                 }
-            })
-
-        axios.post(process.env.REACT_APP_SERVER + '/data/' + stateFips, params)
-            .then(res => {
-                const reducer = (prev, cur) => {
-                    prev[cur.state_fips + cur.county_fips] = { ...cur };
-                    return prev;
-                }
-                // transform data to a map
-                setData(res.data.data.reduce(reducer, {}));
-            })
-            .catch(err => {
-                console.log(err);
             })
 
         return () => {
@@ -165,7 +174,7 @@ function Map({ stateFips }) {
         <div className="map-container" ref={mapBoxContainer}>
             <ScrollIndicator mapBoxContainerRef={mapBoxContainer} valueUpdate={onScrollUpdate}></ScrollIndicator>
             <Legend />
-            <svg className="map-view-box" ref={mapViewBox} onMouseMove={handleMouseMove} viewBox={viewBoxSize} fill="#000">
+            <svg id="map-view-box" ref={mapViewBox} onMouseMove={handleMouseMove} viewBox={viewBoxSize} fill="#000">
             </svg>
             <ZoomOut onClick={onZoomOutClick}/>
         </div> 
