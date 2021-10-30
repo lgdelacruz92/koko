@@ -170,11 +170,9 @@ function Map({ stateFips }) {
                         const countyPercent = parseFloat(countyData[countyFips].percent);
                         const countyMaxPercent = parseFloat(res.data.max_val);
                         const h = calcColor(countyPercent, countyMaxPercent);
-                        if (isNaN(h)) {
-                            debugger;
-                        }
                         return `hsl(${h},90%,61%)`
                     })
+                    .attr('class', 'svg-county')
                 setCountyData(countyData);
             })
             .catch(err => {
