@@ -45,7 +45,6 @@ function Map({ stateFips }) {
     const initialViewBox = `0 0 ${minZoom} ${minZoom}`
 
     const mapViewBox = useRef(null);
-    const [countyData, setCountyData] = useState(null);
     const [zoomVal, setZoomVal] = useState(0);
     const [viewBox, setViewBox] = useState(initialViewBox);
 
@@ -55,12 +54,8 @@ function Map({ stateFips }) {
 
     // event callback for paths
     const pathEventCallback = e => {
-        const fips = e.target.getAttribute('id');
-        if (countyData && countyData[fips]) {
-            popUp(e, countyData[fips]);
-        } else {
-            console.log(`${fips} is ${countyData}`)
-        }
+        const properties = JSON.parse(e.target.getAttribute('data-properties'));
+        popUp(e, properties);
     }
 
     const handleMouseMove = e => {
@@ -69,8 +64,6 @@ function Map({ stateFips }) {
             pathEventCallback(e);
         }
     }
-
-
 
     const onZoomOutClick = () => {
         if (zoomVal - 5 >= 0) {
@@ -155,9 +148,9 @@ function Map({ stateFips }) {
 
         axios.post(process.env.REACT_APP_SERVER + '/make/' + stateFips, params)
             .then(res => {
-                const map = d3.select('#map-view-box');
+                const countyMaxPercent = parseFloat(res.data.geojson.max_val);
 
-                const countyData = res.data.countyData;
+                const map = d3.select('#map-view-box');
                 map.html('');
                 map.selectAll('path')
                     .data(res.data.geojson.features)
@@ -166,14 +159,14 @@ function Map({ stateFips }) {
                     .attr('d', d3.geoPath())
                     .attr('id', county => county.id)
                     .attr('fill', county => {
-                        const countyFips = county.id;
-                        const countyPercent = parseFloat(countyData[countyFips].percent);
-                        const countyMaxPercent = parseFloat(res.data.max_val);
+                        const countyPercent = parseFloat(county.properties.percent);
                         const h = calcColor(countyPercent, countyMaxPercent);
                         return `hsl(${h},90%,61%)`
                     })
+                    .attr('data-properties', county => {
+                        return JSON.stringify(county.properties);
+                    })
                     .attr('class', 'svg-county')
-                setCountyData(countyData);
             })
             .catch(err => {
                 console.log(err);
