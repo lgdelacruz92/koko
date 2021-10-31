@@ -12,6 +12,17 @@ input[type="file"] {
     fill: white;
 }
 
+.upload:hover {
+    cursor: pointer;
+    box-shadow: 2px 2px 3px grey;
+}
+
+.upload div:hover,
+.upload label:hover,
+.upload input:hover {
+    cursor: pointer;
+}
+
 .csv-upload .upload-button {
     display: flex;
     align-items: center;

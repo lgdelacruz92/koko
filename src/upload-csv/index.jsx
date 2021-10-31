@@ -1,5 +1,39 @@
 import './upload-csv.css';
-export default function UploadCsv() {
+import { readFile } from '../utils/utils';
+import axios from 'axios';
+
+/**
+ * This can only handle csv data for counties at the moment.
+ *
+ */
+export default function UploadCountyData() {
+    const _convertToData = file => {
+        return new Promise(async (resolve, reject) => {
+            const lines = await readFile(file);
+            const dataArray = lines.map(line => {
+                const tokens = line.replace('\n','').split(',');
+                return { state_fips: tokens[0], county_fips: tokens[1], percent: tokens[2], value: tokens[3] }
+            })
+            resolve(dataArray)
+        })
+    }
+
+    const uploadFile = e => {
+        console.log(e.target.value);
+        _convertToData(e.target.files[0])
+            .then(dataArray => {
+                debugger;
+                axios.post(process.env.REACT_APP_SERVER + '/use', { data: dataArray })
+                    .then(res => {
+                        localStorage.setItem('session', JSON.stringify(res.data.session));
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+            })
+            .catch(err => console.log(err));
+    }
+
     return <button className="upload">
         <label className="csv-upload">
             <div className="upload-button">
@@ -8,9 +42,7 @@ export default function UploadCsv() {
             </div>
             <input type="file" accept="text/csv" onClick={e => {
                 e.target.value = '';
-            }} onChange={e => {
-                console.log(e);
-            }}></input>
+            }} onChange={uploadFile}></input>
         </label>
     </button>
 }
