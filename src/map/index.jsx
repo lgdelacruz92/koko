@@ -38,7 +38,7 @@ const calcColor = (val, max_val) => {
     return limit - Math.floor(val * limit / max_val);
 }
 
-function Map({ stateFips }) {
+function Map({ geo }) {
     const minZoom = 1060;
     const maxZoom = 300;
 
@@ -142,18 +142,17 @@ function Map({ stateFips }) {
         body.addEventListener('mouseup', mouseUpAction);
 
         const sessionKey = localStorage.getItem('session');
-        const params = {
-            session: sessionKey
-        }
+        const url = `/geo/${geo.type}/geoid/${geo.id}/session/${sessionKey}`;
 
-        axios.post(process.env.REACT_APP_SERVER + '/make/' + stateFips, params)
+        axios.get(process.env.REACT_APP_SERVER + url)
             .then(res => {
-                const countyMaxPercent = parseFloat(res.data.geojson.max_val);
+                const geojson = res.data.formattedGeoJson;
+                const countyMaxPercent = parseFloat(geojson.max_val);
 
                 const map = d3.select('#map-view-box');
                 map.html('');
                 map.selectAll('path')
-                    .data(res.data.geojson.features)
+                    .data(geojson.features)
                     .enter()
                     .append('path')
                     .attr('d', d3.geoPath())
@@ -186,7 +185,7 @@ function Map({ stateFips }) {
             // clean event listener on body
             body.removeEventListener('mouseup', mouseUpAction);
         }
-    },[stateFips]);
+    },[geo]);
 
     return (
         <div className="map-container">

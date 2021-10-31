@@ -9,16 +9,16 @@ export default function BasicSelect({ label, options, value, handleChange }) {
   return (
     <Box sx={{ minWidth: 120 }}>
       <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">{label}</InputLabel>
+        <InputLabel id="selection-label">{label}</InputLabel>
         <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={value}
+          labelId="simple-select-label"
+          id="simple-select"
+          value={value.id}
           label="Age"
           onChange={handleChange}
         >
             {options.map((option, i) => {
-                return <MenuItem key={i} value={option.name}>{option.name}</MenuItem>
+                return <MenuItem key={i} value={option.id} name={option.title}>{option.title}</MenuItem>
             })}
         </Select>
       </FormControl>

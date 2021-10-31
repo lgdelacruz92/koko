@@ -3,14 +3,16 @@ import Map from '../map';
 import MapControls from '../map-controls';
 import { useState } from 'react';
 
-export default function MapEditor({ stateFips }) {
-    const [currentStateFips, setCurrentStateFips] = useState(stateFips);
-    const onUpdateFips = state => {
-        setCurrentStateFips(state.fips);
+export default function MapEditor() {
+    const [geo, setGeo] = useState(51); // initial geoid is all US states
+
+    const onUpdate = geo => {
+        console.log(geo);
+        setGeo(geo);
     }
 
     return <div className="map-editor">
-        <MapControls updateState={onUpdateFips} stateFips={currentStateFips}/>
-        <Map stateFips={currentStateFips}/>
+        <MapControls onUpdate={onUpdate}/>
+        <Map geo={geo}/>
     </div>
 }

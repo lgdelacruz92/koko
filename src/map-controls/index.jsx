@@ -1,9 +1,9 @@
 import './map-controls.css'
-import StateSelect from '../state-select';
+import GeoSelection from '../geo-selection';
 
-export default function MapControls({ updateState, stateFips }) {
+export default function MapControls({ onUpdate }) {
 
     return <div className="map-controls">
-        <StateSelect updateState={updateState} stateFips={stateFips}/>
+        <GeoSelection onUpdate={onUpdate} />
     </div>
 }

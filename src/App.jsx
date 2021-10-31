@@ -9,7 +9,6 @@ import axios from 'axios';
 function App() {
     const [showSidePanel, setShowSidePanel] = useState(false);
     const [features, setFeatures] = useState([]);
-    const [mapId, setMapId] = useState('12');
     const [showUploadFile, setShowUploadFile] = useState(false);
     const [majorError, setMajorError] = useState(false);
 
@@ -26,10 +25,6 @@ function App() {
                 setShowSidePanel(true);
             })
             .catch(err => console.log(err));
-    }
-
-    const handleClickAction = id => {
-        setMapId(`${id}`);
     }
 
     const handleUploadClick = e => {
@@ -64,13 +59,13 @@ function App() {
 
     return (
         <div className="App" onClick={appClick}>
-            <SidePanel show={showSidePanel} data={{ features }} clickAction={id => handleClickAction(id) }/>
+            <SidePanel show={showSidePanel} data={{ features }}/>
             <div className="main-panel">
                 <Nav hamburgerClick={hamburgerClick} 
                     searchAction={searchAction}
                     uploadClick={handleUploadClick}
                 />
-                { !majorError ? <MapEditor stateFips={mapId}/> : <div>Major error happened. If this persist, please contact us.</div> }
+                { !majorError ? <MapEditor/> : <div>Major error happened. If this persist, please contact us.</div> }
                 <div className="state-info-popup">
                     <div id="state">CA</div>
                     <div id="county">Santa Barbara</div>
