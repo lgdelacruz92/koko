@@ -34,9 +34,10 @@ export default function GeoSelection({ onUpdate, initialValue }) {
     }, [onUpdate, selected])
 
     return <BasicSelect
-    options={options}
-    label="Geographies"
-    value={selected}
-    handleChange={onSelect}/>
+        options={options}
+        label="Geographies"
+        value={selected}
+        handleChange={onSelect}
+    />
 }
 
