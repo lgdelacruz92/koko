@@ -144,7 +144,6 @@ function Map({ geo }) {
         const sessionKey = localStorage.getItem('session');
         
         if (geo && sessionKey) {
-            console.log(geo);
             const url = `/geo/${geo.type}/geoid/${geo.id}/session/${sessionKey}`;
             axios.get(process.env.REACT_APP_SERVER + url)
             .then(res => {
