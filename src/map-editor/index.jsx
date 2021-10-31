@@ -4,10 +4,9 @@ import MapControls from '../map-controls';
 import { useState } from 'react';
 
 export default function MapEditor() {
-    const [geo, setGeo] = useState(51); // initial geoid is all US states
+    const [geo, setGeo] = useState(null); // initial geoid is all US states
 
     const onUpdate = geo => {
-        console.log(geo);
         setGeo(geo);
     }
 

@@ -20,9 +20,9 @@ function popUp(e, json) {
     ].join(';'));
 
     // Update the values
-    popup.querySelector('#state').innerText = json.state_name;
-    popup.querySelector('#county').innerText = json.county_name;
-    popup.querySelector('#value').innerText = `${json.percent}%`;
+    popup.querySelector('#state').innerText = json.state_name ? json.state_name : '';
+    popup.querySelector('#county').innerText = json.county_name ? json.county_name : '';
+    popup.querySelector('#value').innerText = json.percent ? `${json.percent}%` : '';
 
     window.popupTimeout = setTimeout(() => {
         popup.setAttribute('style', 'display: none');
@@ -142,9 +142,11 @@ function Map({ geo }) {
         body.addEventListener('mouseup', mouseUpAction);
 
         const sessionKey = localStorage.getItem('session');
-        const url = `/geo/${geo.type}/geoid/${geo.id}/session/${sessionKey}`;
-
-        axios.get(process.env.REACT_APP_SERVER + url)
+        
+        if (geo && sessionKey) {
+            console.log(geo);
+            const url = `/geo/${geo.type}/geoid/${geo.id}/session/${sessionKey}`;
+            axios.get(process.env.REACT_APP_SERVER + url)
             .then(res => {
                 const geojson = res.data.formattedGeoJson;
                 const countyMaxPercent = parseFloat(geojson.max_val);
@@ -158,9 +160,14 @@ function Map({ geo }) {
                     .attr('d', d3.geoPath())
                     .attr('id', county => county.id)
                     .attr('fill', county => {
-                        const countyPercent = parseFloat(county.properties.percent);
-                        const h = calcColor(countyPercent, countyMaxPercent);
-                        return `hsl(${h},90%,61%)`
+                        if (county.properties.percent) {
+                            const countyPercent = parseFloat(county.properties.percent);
+                            const h = calcColor(countyPercent, countyMaxPercent);
+                            return `hsl(${h},90%,61%)`
+                        }
+                        else {
+                            return 'black';
+                        }
                     })
                     .attr('data-properties', county => {
                         return JSON.stringify(county.properties);
@@ -174,7 +181,9 @@ function Map({ geo }) {
                 if (mapViewBoxEl.innerHTML === '') {
                     console.log('error')
                 }
-            })
+            });
+        }
+
 
         return () => {
             // clean mapViewBoxEl listeners
