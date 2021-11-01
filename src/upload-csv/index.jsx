@@ -4,34 +4,54 @@ import axios from 'axios';
 
 /**
  * This can only handle csv data for counties at the moment.
- *
+ * @param {Function} csvUploaded (called when csv is uploaded)
+ * @return React.Component
  */
-export default function UploadCountyData() {
+export default function UploadCountyData({ csvUploaded }) {
+
+    /**
+     * This converts file into lines
+     * @param {File} file 
+     * @returns Promise
+     */
     const _convertToData = file => {
         return new Promise(async (resolve, reject) => {
-            const lines = await readFile(file);
-            const dataArray = lines.map(line => {
-                const tokens = line.replace('\n','').split(',');
-                return { state_fips: tokens[0], county_fips: tokens[1], percent: tokens[2], value: tokens[3] }
-            })
-            resolve(dataArray)
+            try {
+                const lines = await readFile(file);
+
+                // TODO: maybe validate csv here in the future
+                const dataArray = lines.map(line => {
+                    const tokens = line.replace('\n','').split(',');
+                    return { state_fips: tokens[0], county_fips: tokens[1], percent: tokens[2], value: tokens[3] }
+                })
+                resolve(dataArray)
+            }
+            catch (e) {
+                console.error(e);
+                reject(e);
+            }
         })
     }
 
+    /**
+     * The event handler with upload csv is clicked
+     * Note: There is no system in place to validate csv
+     * @param {Event} e 
+     */
     const uploadFile = e => {
         console.log(e.target.value);
         _convertToData(e.target.files[0])
             .then(dataArray => {
-                debugger;
                 axios.post(process.env.REACT_APP_SERVER + '/use', { data: dataArray })
                     .then(res => {
-                        localStorage.setItem('session', JSON.stringify(res.data.session));
+                        localStorage.setItem('session', res.data.session);
+                        csvUploaded();
                     })
                     .catch(err => {
-                        console.log(err);
+                        console.error(err);
                     });
             })
-            .catch(err => console.log(err));
+            .catch(err => console.error(err));
     }
 
     return <button className="upload">

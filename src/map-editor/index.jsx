@@ -7,6 +7,7 @@ export default function MapEditor() {
     const [geo, setGeo] = useState(null); // initial geoid is all US states
 
     const onUpdate = geo => {
+        console.log(geo);
         setGeo(geo);
     }
 
