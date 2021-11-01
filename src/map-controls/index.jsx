@@ -2,6 +2,7 @@ import './map-controls.css'
 import GeoSelection from '../geo-selection';
 import UploadCountyData from '../upload-csv';
 import AddTitle from '../add-title';
+import AddSubtitle from '../add-subtitle';
 
 export default function MapControls({ onUpdate, mapProperties }) {
 
@@ -21,6 +22,10 @@ export default function MapControls({ onUpdate, mapProperties }) {
                 const newMapProperties = { ...mapProperties };
                 newMapProperties.title = e;
                 onUpdate(newMapProperties);
+            } else if (controlBlock === 'add-subtitle') {
+                const newMapProperties = { ...mapProperties };
+                newMapProperties.subtitle = e;
+                onUpdate(newMapProperties);
             }
         }
     }
@@ -34,6 +39,9 @@ export default function MapControls({ onUpdate, mapProperties }) {
         </div>
         <div className="control-block">
             <AddTitle onTitleUpdate={e => _onUpdate('add-title',e.target.value)}/>
+        </div>
+        <div className="control-block">
+            <AddSubtitle onSubtitleUpdate={e => _onUpdate('add-subtitle',e.target.value)}/>
         </div>
     </div>
 }

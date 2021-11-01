@@ -6,7 +6,8 @@ import { useState } from 'react';
 export default function MapEditor() {
     const [mapProperties, setMapProperties] = useState({
         geo: { id: 51, title: 'All US Counties', type: 'County'},
-        title: ''
+        title: '',
+        subtitle: ''
     }); // initial geoid is all US states
 
     const onUpdate = newMapProperties => {

@@ -4,6 +4,7 @@ import ZoomControls from '../zoom-controls';
 import Legend from './legend';
 import ZoomOut from './zoom-out';
 import MapTitle from '../map-title';
+import MapSubtitle from '../map-subtitle';
 import './map.css';
 import axios from 'axios';
 import * as d3 from 'd3';
@@ -202,6 +203,7 @@ function Map({ mapProperties }) {
             <ScrollIndicator value={zoomVal}></ScrollIndicator>
             <Legend />
             <MapTitle title={mapProperties.title}/>
+            <MapSubtitle subtitle={mapProperties.subtitle}/>
             <svg id="map-view-box" ref={mapViewBox} onMouseMove={handleMouseMove} viewBox={viewBox} fill="#000">
             </svg>
             <div className="zoom-controls-container">
