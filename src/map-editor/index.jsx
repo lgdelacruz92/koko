@@ -4,15 +4,21 @@ import MapControls from '../map-controls';
 import { useState } from 'react';
 
 export default function MapEditor() {
-    const [geo, setGeo] = useState(null); // initial geoid is all US states
+    const [mapProperties, setMapProperties] = useState({
+        geo: { id: 51, title: 'All US Counties', type: 'County'},
+        title: ''
+    }); // initial geoid is all US states
 
-    const onUpdate = geo => {
-        console.log(geo);
-        setGeo(geo);
+    const onUpdate = newMapProperties => {
+        const currentProp = JSON.stringify(mapProperties);
+        const newProp = JSON.stringify(newMapProperties);
+        if (currentProp !== newProp) {
+            setMapProperties(newMapProperties);
+        }
     }
 
     return <div className="map-editor">
-        <MapControls onUpdate={onUpdate}/>
-        <Map geo={geo}/>
+        <MapControls onUpdate={onUpdate} mapProperties={mapProperties}/>
+        <Map mapProperties={mapProperties}/>
     </div>
 }

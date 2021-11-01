@@ -3,6 +3,7 @@ import ScrollIndicator from './scroll-indicator';
 import ZoomControls from '../zoom-controls';
 import Legend from './legend';
 import ZoomOut from './zoom-out';
+import MapTitle from '../map-title';
 import './map.css';
 import axios from 'axios';
 import * as d3 from 'd3';
@@ -38,7 +39,7 @@ const calcColor = (val, max_val) => {
     return limit - Math.floor(val * limit / max_val);
 }
 
-function Map({ geo }) {
+function Map({ mapProperties }) {
     const minZoom = 1060;
     const maxZoom = 300;
 
@@ -142,8 +143,9 @@ function Map({ geo }) {
         body.addEventListener('mouseup', mouseUpAction);
 
         const sessionKey = localStorage.getItem('session');
-        
-        if (geo && sessionKey) {
+        console.log('from map component', mapProperties.geo);
+        if (mapProperties.geo.id && sessionKey) {
+            const geo = mapProperties.geo;
             const url = `/geo/${geo.type}/geoid/${geo.id}/session/${sessionKey}`;
             axios.get(process.env.REACT_APP_SERVER + url)
             .then(res => {
@@ -193,12 +195,13 @@ function Map({ geo }) {
             // clean event listener on body
             body.removeEventListener('mouseup', mouseUpAction);
         }
-    },[geo]);
+    },[mapProperties.geo]);
 
     return (
         <div className="map-container">
             <ScrollIndicator value={zoomVal}></ScrollIndicator>
             <Legend />
+            <MapTitle title={mapProperties.title}/>
             <svg id="map-view-box" ref={mapViewBox} onMouseMove={handleMouseMove} viewBox={viewBox} fill="#000">
             </svg>
             <div className="zoom-controls-container">
