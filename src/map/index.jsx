@@ -51,6 +51,7 @@ function Map({ mapProperties }) {
     const [viewBox, setViewBox] = useState(initialViewBox);
 
     const onRecenterClick = () => {
+        setZoomVal(5);
         setViewBox(initialViewBox);
     }
 
