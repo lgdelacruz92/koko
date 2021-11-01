@@ -24,7 +24,7 @@ function popUp(e, json) {
     // Update the values
     popup.querySelector('#state').innerText = json.state_name ? json.state_name : '';
     popup.querySelector('#county').innerText = json.county_name ? json.county_name : '';
-    popup.querySelector('#value').innerText = json.percent ? `${json.percent}%` : '';
+    popup.querySelector('#value').innerText = json.value ? `${json.value}` : '';
 
     window.popupTimeout = setTimeout(() => {
         popup.setAttribute('style', 'display: none');
@@ -152,8 +152,7 @@ function Map({ mapProperties }) {
             axios.get(process.env.REACT_APP_SERVER + url)
             .then(res => {
                 const geojson = res.data.formattedGeoJson;
-                const countyMaxPercent = parseFloat(geojson.max_val);
-
+                const maxValue = parseFloat(geojson.max_val);
                 const map = d3.select('#map-view-box');
                 map.html('');
                 map.selectAll('path')
@@ -163,9 +162,9 @@ function Map({ mapProperties }) {
                     .attr('d', d3.geoPath())
                     .attr('id', county => county.id)
                     .attr('fill', county => {
-                        if (county.properties.percent) {
-                            const countyPercent = parseFloat(county.properties.percent);
-                            const h = calcColor(countyPercent, countyMaxPercent);
+                        if (county.properties.value) {
+                            const value = parseFloat(county.properties.value);
+                            const h = calcColor(value, maxValue);
                             return `hsl(${h},90%,61%)`
                         }
                         else {

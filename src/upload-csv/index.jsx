@@ -22,7 +22,7 @@ export default function UploadCountyData({ csvUploaded }) {
                 // TODO: maybe validate csv here in the future
                 const dataArray = lines.map(line => {
                     const tokens = line.replace('\n','').split(',');
-                    return { state_fips: tokens[0], county_fips: tokens[1], percent: tokens[2], value: tokens[3] }
+                    return { fips: tokens[0], value: tokens[1]}
                 })
                 resolve(dataArray)
             }
