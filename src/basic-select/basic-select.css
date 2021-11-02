@@ -1,0 +1,16 @@
+.MuiList-root {
+    background: #213040;
+}
+
+.basic-selection-component svg {
+    color: white;
+}
+
+.basic-selection-component label {
+    background: #213040;
+    color: white;
+}
+
+.basic-selection-component .MuiOutlinedInput-root {
+    border: 1px solid white;
+}

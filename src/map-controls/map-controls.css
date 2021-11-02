@@ -6,3 +6,17 @@
 .control-block {
     margin-bottom: 1rem;
 }
+
+.control-block .MuiOutlinedInput-root {
+    border: 1px solid white;
+    color: white;
+}
+
+.control-block label {
+    color: white;
+    background: #213040;
+}
+
+.control-block input {
+    color: white;
+}

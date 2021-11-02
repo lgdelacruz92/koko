@@ -24,3 +24,23 @@
     right: 1rem;
     bottom: 1rem;
 }
+
+.state-info-popup {
+    background: #213040;
+}
+
+.state-info-popup  #state,
+.state-info-popup #county,
+.state-info-popup #value {
+    min-width: 13rem;
+}
+
+.state-info-popup  #state {
+    margin-top: 1rem;
+    font-weight: bold;
+}
+
+.state-info-popup  #value {
+    font-family: Arial, Helvetica, sans-serif;
+    margin-bottom: 1rem;
+}

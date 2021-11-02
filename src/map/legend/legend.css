@@ -19,11 +19,11 @@
 .legend-view .max-label {
     position: absolute;
     top: 0;
-    transform: translate(-100%, 0);
+    transform: translate(-110%, -50%);
 }
 
 .legend-view .min-label {
     position: absolute;
     bottom: 0;
-    transform: translate(-100%, 0);
+    transform: translate(-160%, 50%);
 }
