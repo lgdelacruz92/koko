@@ -2,7 +2,7 @@ import './legend.css';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-export default function Legend() {
+export default function Legend({ geo }) {
     const [values, setValues] = useState({ min: '', max: '' });
     useEffect(() => {
         const sessionToken = localStorage.getItem('session');
@@ -13,7 +13,7 @@ export default function Legend() {
             .catch(err => {
                 console.error(err);
             });
-    }, []);
+    }, [geo]);
 
     return <div className="legend-container">
         <div className="legend-view">

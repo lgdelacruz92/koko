@@ -145,7 +145,6 @@ function Map({ mapProperties }) {
         body.addEventListener('mouseup', mouseUpAction);
 
         const sessionKey = localStorage.getItem('session');
-        console.log('from map component', mapProperties.geo);
         if (mapProperties.geo.id && sessionKey) {
             const geo = mapProperties.geo;
             const url = `/geo/${geo.type}/geoid/${geo.id}/session/${sessionKey}`;
@@ -201,7 +200,7 @@ function Map({ mapProperties }) {
     return (
         <div className="map-container">
             <ScrollIndicator value={zoomVal}></ScrollIndicator>
-            <Legend />
+            <Legend geo={mapProperties.geo}/>
             <MapTitle title={mapProperties.title}/>
             <MapSubtitle subtitle={mapProperties.subtitle}/>
             <svg id="map-view-box" ref={mapViewBox} onMouseMove={handleMouseMove} viewBox={viewBox} fill="#000">
