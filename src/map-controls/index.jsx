@@ -3,6 +3,8 @@ import GeoSelection from '../geo-selection';
 import UploadCountyData from '../upload-csv';
 import AddTitle from '../add-title';
 import AddSubtitle from '../add-subtitle';
+import SaveAsPng from '../save-as-png';
+import Embed from '../embed';
 
 export default function MapControls({ onUpdate, mapProperties }) {
 
@@ -42,6 +44,12 @@ export default function MapControls({ onUpdate, mapProperties }) {
         </div>
         <div className="control-block">
             <AddSubtitle onSubtitleUpdate={e => _onUpdate('add-subtitle',e.target.value)}/>
+        </div>
+        <div className="control-block">
+            <SaveAsPng />
+        </div>
+        <div className="control-block">
+            <Embed />
         </div>
     </div>
 }

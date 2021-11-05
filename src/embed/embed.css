@@ -1,0 +1,7 @@
+.embed-to-your-site {
+    display: flex;
+    justify-self: center;
+    align-items: center;
+    color: white;
+    text-decoration: underline;
+}

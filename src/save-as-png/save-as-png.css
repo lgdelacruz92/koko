@@ -1,0 +1,15 @@
+.save-as-png {
+    width: 100%;
+    height: 3rem;
+    border-radius: 5px;
+    background: #71858a;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 1px 1px 2px black;
+}
+
+.save-as-png > svg {
+    margin-right: 3px;
+}
