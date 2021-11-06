@@ -25,6 +25,9 @@ function App() {
             ignore |= targetClassName.includes('send-me-email-container');
             ignore |= targetClassName.includes('email-send-button');
             ignore |= targetClassName.includes('email-text-field');
+            ignore |= targetClassName.includes('embed-to-your-site');
+            ignore |= targetClassName.includes('embed-to-your-site-icon');
+            ignore |= targetClassName.includes('embed-to-your-site-text');
             if (ignore) {
                 return;
             }
