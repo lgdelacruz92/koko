@@ -185,7 +185,7 @@ function Map({ mapProperties }) {
             });
         }
 
-
+        console.log('rendering map');
         return () => {
             // clean mapViewBoxEl listeners
             mapViewBoxEl.removeEventListener('mousedown', mouseDownAction);
