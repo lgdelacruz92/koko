@@ -5,3 +5,7 @@
     color: white;
     text-decoration: underline;
 }
+
+.embed-to-your-site:hover {
+    font-size: 1.02rem;
+}
