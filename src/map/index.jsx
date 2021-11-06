@@ -135,6 +135,68 @@ function Map({ mapProperties }) {
             mapViewBoxEl.setAttribute('style', '');
         }
 
+        /**
+         * Draws the map using geojson
+         */
+        const drawGeoJson = geojson => {
+            const maxValue = parseFloat(geojson.max_val);
+            const map = d3.select('#map-view-box');
+            map.html('');
+            map.selectAll('path')
+                .data(geojson.features)
+                .enter()
+                .append('path')
+                .attr('d', d3.geoPath())
+                .attr('id', county => county.id)
+                .attr('fill', county => {
+                    if (county.properties.value) {
+                        const value = parseFloat(county.properties.value);
+                        const h = calcColor(value, maxValue);
+                        return `hsl(${h},90%,61%)`
+                    }
+                    else {
+                        return 'black';
+                    }
+                })
+                .attr('data-properties', county => {
+                    return JSON.stringify(county.properties);
+                })
+                .attr('class', 'svg-county')
+        }
+
+        /**
+         * Gets the geojson data from the server
+         */
+        const fetchGeoJson = (geo, sessionKey) => {
+            return new Promise((resolve, reject) => {
+                const url = `/geo/${geo.type}/geoid/${geo.id}/session/${sessionKey}`;
+                axios.get(process.env.REACT_APP_SERVER + url)
+                    .then(res => {
+                        resolve(res.data.formattedGeoJson);
+                    })
+                    .catch(err => {
+                        reject(err);
+                    })
+            })
+
+        }
+
+        /**
+         * Makes a copy of default geojson
+         */
+        const makeDefaultGeojson = () => {
+            return new Promise((resolve, reject) => {
+                axios.post(process.env.REACT_APP_SERVER + '/default')
+                    .then(response => {
+                        // data : { session: '123' }
+                        resolve(response.data);
+                    })
+                    .catch(err => {
+                        reject(err);
+                    })
+            })
+        }
+
         // Attach event listeners
         mapViewBoxEl.addEventListener('mousedown', mouseDownAction);
         mapViewBoxEl.addEventListener('mousemove', mouseMoveAction);
@@ -144,45 +206,32 @@ function Map({ mapProperties }) {
         const body = document.querySelector('body');
         body.addEventListener('mouseup', mouseUpAction);
 
-        const sessionKey = localStorage.getItem('session');
-        if (mapProperties.geo.id && sessionKey) {
+        if (mapProperties.geo.id) {
             const geo = mapProperties.geo;
-            const url = `/geo/${geo.type}/geoid/${geo.id}/session/${sessionKey}`;
-            axios.get(process.env.REACT_APP_SERVER + url)
-            .then(res => {
-                const geojson = res.data.formattedGeoJson;
-                const maxValue = parseFloat(geojson.max_val);
-                const map = d3.select('#map-view-box');
-                map.html('');
-                map.selectAll('path')
-                    .data(geojson.features)
-                    .enter()
-                    .append('path')
-                    .attr('d', d3.geoPath())
-                    .attr('id', county => county.id)
-                    .attr('fill', county => {
-                        if (county.properties.value) {
-                            const value = parseFloat(county.properties.value);
-                            const h = calcColor(value, maxValue);
-                            return `hsl(${h},90%,61%)`
-                        }
-                        else {
-                            return 'black';
-                        }
+            const sessionKey = localStorage.getItem('session');
+
+            if (sessionKey) {
+                fetchGeoJson(geo, sessionKey)
+                    .then(geojson => {
+                        drawGeoJson(geojson);
                     })
-                    .attr('data-properties', county => {
-                        return JSON.stringify(county.properties);
+                    .catch(err => {
+                        console.error(err);
                     })
-                    .attr('class', 'svg-county')
-            })
-            .catch(err => {
-                console.log(err);
-            })
-            .finally(() => {
-                if (mapViewBoxEl.innerHTML === '') {
-                    console.log('error')
-                }
-            });
+            }
+            else {
+                makeDefaultGeojson()
+                    .then(session => {
+                        // store the copied geojson session
+                        localStorage.setItem('session', session.session);
+
+                        // Restart the whole app
+                        window.location.reload(false);
+                    })
+                    .catch(err => {
+                        console.error(err);
+                    })
+            }
         }
 
 
