@@ -8,6 +8,7 @@
     --secondary-color: rgb(60, 142, 207);
     --secondary-font-color: white;
     --secondary-button-hover: rgb(60, 200, 240);
+    --main-color: #213040;
 }
 
 .App {
@@ -20,7 +21,9 @@
     flex-direction: row;
     align-items: center;
     color: white;
-    background-color: #213040;
+    background-color: var(--main-color);
+    padding: 1rem;
+    box-shadow: 3px 3px 4px #222;
 }
 
 .main-panel {
@@ -48,4 +51,14 @@ th, td {
     font-weight: normal;
     padding: .25rem;
     border: 1px solid #666;
+}
+
+.App .email-popup-container {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--main-color);
+    padding: 1rem;
+    box-shadow: 3px 3px 4px #222;
 }

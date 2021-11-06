@@ -1,0 +1,9 @@
+.send-me-email-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.email-text-field {
+    margin: 1rem !important;
+}
