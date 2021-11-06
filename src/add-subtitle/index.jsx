@@ -8,7 +8,7 @@ export default function AddSubtitle({ onSubtitleUpdate }) {
         onSubtitleUpdate(e);
     }
     return <TextField
-        id="outlined-basic"
+        className="add-subtitle"
         label="Subtitle"
         variant="outlined"
         onChange={onChange}

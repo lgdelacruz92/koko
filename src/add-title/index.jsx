@@ -8,7 +8,7 @@ export default function AddTitle({ onTitleUpdate }) {
         onTitleUpdate(e);
     }
     return <TextField
-        id="outlined-basic"
+        className="add-title"
         label="Title"
         variant="outlined"
         onChange={onChange}

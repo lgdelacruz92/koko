@@ -5,6 +5,7 @@ import AddTitle from '../add-title';
 import AddSubtitle from '../add-subtitle';
 import SaveAsPng from '../save-as-png';
 import Embed from '../embed';
+import LinkToCsvTutorial from '../link-to-csv-tutorial';
 
 export default function MapControls({ onUpdate, mapProperties }) {
 
@@ -35,6 +36,9 @@ export default function MapControls({ onUpdate, mapProperties }) {
     return <div className="map-controls">
         <div className="control-block">
             <UploadCountyData csvUploaded={() => _onUpdate('csv-upload')} />
+        </div>
+        <div className="control-block">
+            <LinkToCsvTutorial/>
         </div>
         <div className="control-block">
             <GeoSelection onUpdate={e => _onUpdate('geo-selection', e)} />
